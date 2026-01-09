@@ -1,0 +1,195 @@
+/* Variáveis de cores */
+:root {
+    --primaria: #58b19f;
+    --primaria-escura: #458a7b;
+    --fundo-preto: #050505;     /* Um preto levemente mais rico */
+    --fundo-branco: #ffffff;
+    --cinza-claro: #f4f7f6;
+    --texto-branco: #ffffff;
+    --texto-preto: #1a1a1b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Configuração do fundo e container das ondas */
+body {
+    background-color: var(--fundo-preto);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Importante para não dar scroll com as ondas */
+    position: relative;
+}
+
+/* Container que fixa as ondas na parte inferior da tela */
+.ondas-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: -1; /* Fica atrás de tudo */
+}
+
+.onda {
+    width: 100%;
+    height: auto;
+}
+
+/* Animação opcional: faz a onda balançar levemente */
+@keyframes flutuar {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(15px); }
+    100% { transform: translateY(0); }
+}
+
+.ondas-container svg {
+    animation: flutuar 6s ease-in-out infinite;
+}
+
+/* O efeito de Glow (Blur) que já tínhamos, agora combinando com as ondas */
+body::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: var(--primaria);
+    filter: blur(150px);
+    opacity: 0.1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -2;
+}
+
+/* Caixa principal */
+.caixa-login {
+    display: flex;
+    position: relative;
+    width: 1000px;
+    height: 600px;
+    background: var(--fundo-branco);
+    border-radius: 24px;
+    overflow: hidden;
+    /* Sombreamento mais suave para combinar com o fundo */
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+/* Painéis laterais */
+.painel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.esquerda {
+    background-color: var(--primaria);
+    color: var(--texto-branco);
+}
+
+.esquerda h1 { font-size: 42px; margin-bottom: 10px; }
+.esquerda p { margin-bottom: 30px; opacity: 0.9; }
+
+.direita {
+    background-color: var(--fundo-branco);
+}
+
+.titulo-registro { color: var(--primaria); font-size: 42px; margin-bottom: 10px; }
+.subtitulo { color: #888; font-size: 14px; margin-bottom: 30px; }
+
+/* Formulários e Campos */
+.formulario {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.campo {
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+    border: none;
+    padding: 0 15px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+/* Efeito de foco nos campos */
+.campo:focus {
+    outline: 2px solid var(--primaria);
+    background-color: #fff;
+}
+
+.campo-cinza {
+    background-color: var(--cinza-claro);
+    color: var(--texto-preto);
+}
+
+/* Botões */
+.botao-vazado {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    height: 48px;
+    border-radius: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.botao-vazado:hover {
+    background: white;
+    color: var(--primaria);
+}
+
+.botao-cheio {
+    background-color: var(--primaria);
+    color: white;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.botao-cheio:hover {
+    background-color: var(--primaria-escura);
+}
+
+/* Divisor central */
+.circulo-ou {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #666;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+
