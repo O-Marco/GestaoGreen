@@ -1,0 +1,557 @@
+/* CONFIGURAÇÕES GERAIS */
+:root {
+    --cor-primaria: #00ffaa;
+    --cor-fundo-escuro: #161617;
+    --cor-amarela: #ffc107;
+    --cor-texto-suave: #888;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.corpo-dashboard {
+    display: flex;
+    overflow: hidden;
+}
+
+/* SEÇÃO: BARRA LATERAL */
+.barra-lateral {
+    width: 80px; /* Largura quando fechada */
+    background-color: var(--cor-fundo-escuro);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease; /* Efeito suave ao abrir */
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* Quando a classe 'aberta' for adicionada via JS */
+.barra-lateral.aberta {
+    width: 240px;
+}
+
+/* CABEÇALHO DA SIDEBAR (Logo e Botão) */
+.cabecalho-sidebar {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    color: var(--cor-primaria);
+    font-weight: 800;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn-hamburguer {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--cor-amarela);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+
+.btn-hamburguer:hover {
+    transform: scale(1.1);
+}
+
+/* ITENS DO MENU */
+.item-menu {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--cor-texto-suave);
+    height: 55px;
+    padding-left: 30px; /* Alinhamento fixo do ícone */
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.item-menu i {
+    font-size: 20px;
+    min-width: 25px; /* Garante que o ícone ocupe o mesmo espaço */
+    text-align: center;
+}
+
+.item-menu span {
+    margin-left: 20px;
+    font-size: 15px;
+    opacity: 0; /* Escondido quando fechado */
+    transition: opacity 0.2s;
+}
+
+/* Mostra o texto quando a sidebar estiver aberta */
+.barra-lateral.aberta .item-menu span {
+    opacity: 1;
+}
+
+.item-menu:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.item-menu.ativo {
+    color: #fff;
+    border-left: 4px solid var(--cor-primaria);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* CONTEÚDO PRINCIPAL */
+.conteudo-principal {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+/* SEÇÃO: CABEÇALHO E PESQUISA */
+.topo-conteudo {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Separa pesquisa do perfil */
+    padding: 0 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.container-pesquisa {
+    display: flex;
+    align-items: center;
+    background-color: #f1f3f4;
+    padding: 8px 15px;
+    border-radius: 8px;
+    width: 400px; /* Largura da barra */
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+/* Efeito ao clicar na barra de pesquisa */
+.container-pesquisa:focus-within {
+    background-color: #fff;
+    border-color: var(--cor-amarela);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.icone-pesquisa {
+    color: #5f6368;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+#campo-pesquisa {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 15px;
+    color: #3c4043;
+}
+
+.perfil-usuario {
+    font-size: 28px;
+    color: var(--cor-fundo-escuro);
+    cursor: pointer;
+}
+
+/* SEÇÃO: FILTROS */
+.secao-filtros {
+    display: flex;
+    justify-content: space-between; /* Filtros na esquerda, Botão na direita */
+    align-items: center;
+    padding: 20px 30px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
+
+.grupo-filtros {
+    display: flex;
+    gap: 30px; /* Espaço entre os dois seletores */
+}
+
+.filtro-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #666;
+}
+
+.btn-filtro {
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 0;
+    transition: color 0.2s;
+}
+
+.btn-filtro:hover {
+    color: var(--cor-amarela);
+}
+
+/* BOTÃO NOVO ITEM */
+.btn-adicionar {
+    background-color: var(--cor-fundo-escuro);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.btn-adicionar:hover {
+    background-color: #2a2a2b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-adicionar i {
+    color: var(--cor-primaria); /* Ícone verde */
+}
+
+/* SEÇÃO: ESTILOS DO MODAL */
+.sobreposicao-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escurecido */
+    display: none; /* Escondido por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px); /* Desfoca o fundo do site */
+}
+
+/* Mostra o modal quando esta classe for adicionada */
+.sobreposicao-modal.ativo {
+    display: flex;
+}
+
+.conteudo-modal {
+    background-color: #fff;
+    width: 450px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: abrirModal 0.3s ease-out;
+}
+
+@keyframes abrirModal {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.cabecalho-modal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.btn-fechar {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+}
+
+/* FORMULÁRIO */
+.campo-grupo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-grupo label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+}
+
+.campo-grupo input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.campo-grupo input:focus {
+    border-color: var(--cor-amarela);
+}
+
+.acoes-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-cancelar {
+    background: none;
+    border: none;
+    color: #777;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-salvar {
+    background-color: var(--cor-amarela);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Ajustes para o formulário dinâmico */
+.linha-flex {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-acao-pequeno {
+    background-color: #eee;
+    border: none;
+    border-radius: 4px;
+    padding: 0 12px;
+    cursor: pointer;
+    color: #333;
+}
+
+.botoes-adicionar-campo {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
+}
+
+.btn-add-campo {
+    flex: 1;
+    background: none;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #666;
+    transition: 0.2s;
+}
+
+.btn-add-campo:hover {
+    background-color: #f0f0f0;
+    border-color: var(--cor-amarela);
+}
+
+/* Estilo do campo dinâmico criado */
+.campo-dinamico {
+    margin-bottom: 15px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* LINHA FLEXÍVEL PARA CATEGORIAS */
+.linha-flex {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.linha-flex select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    outline: none;
+}
+
+.btn-acao-pequeno {
+    background-color: var(--cor-amarela);
+    border: none;
+    border-radius: 6px;
+    padding: 0 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-acao-pequeno:hover {
+    background-color: #e5ae06;
+}
+
+/* BOTÕES DE ADICIONAR CAMPOS (TEXTO/SENHA) */
+.botoes-adicionar-campo {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+}
+
+.btn-add-campo {
+    flex: 1;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.btn-add-campo:hover {
+    background-color: #e8e8e8;
+    border-color: var(--cor-amarela);
+}
+
+/* CAMPOS QUE O JS IRÁ CRIAR */
+.campo-dinamico {
+    background: #fdfdfd;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 15px;
+    animation: surgimento 0.3s ease;
+}
+
+@keyframes surgimento {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-remover {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* SEÇÃO: LISTA DE REGISTROS */
+.container-lista {
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    overflow: hidden;
+}
+
+.item-registro {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.item-registro:hover {
+    background-color: #fcfcfc;
+}
+
+.item-registro:last-child {
+    border-bottom: none;
+}
+
+/* Ícone baseado na categoria */
+.icone-categoria {
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    color: var(--cor-fundo-escuro);
+    font-size: 18px;
+}
+
+.info-registro {
+    flex: 1;
+}
+
+.info-registro h3 {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.info-registro span {
+    font-size: 12px;
+    color: #999;
+}
+
+.badge-categoria {
+    font-size: 11px;
+    background: #eefaf6;
+    color: #2ecc71;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+#container-nova-categoria {
+    gap: 8px;
+    align-items: center;
+}
+
+#container-nova-categoria input[type="color"] {
+    height: 38px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: none;
+}
+
+#container-nova-categoria .btn-remover {
+    margin-left: 0;
+    padding: 10px;
+    color: #ff4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

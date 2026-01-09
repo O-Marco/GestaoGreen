@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GR Dash - Gerenciador</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="corpo-dashboard">
+
+    <aside class="barra-lateral" id="sidebar">
+        <div class="cabecalho-sidebar">
+            <div class="logo">GR<br>Dash</div>
+
+            <button class="btn-hamburguer" id="btn-alternar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="menu-navegacao">
+            <a href="#" class="item-menu ativo">
+                <i class="fas fa-vault"></i>
+                <span>Meu Cofre</span>
+            </a>
+            <a href="#" class="item-menu">
+                <i class="fas fa-credit-card"></i>
+                <span>Cartões</span>
+            </a>
+            <a href="#" class="item-menu">
+                <i class="fas fa-user-shield"></i>
+                <span>Identidades</span>
+            </a>
+            <a href="#" class="item-menu">
+                <i class="fas fa-trash"></i>
+                <span>Lixeira</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+        <header class="topo-conteudo">
+            <div class="container-pesquisa">
+                <i class="fas fa-search icone-pesquisa"></i>
+                <input type="text" id="campo-pesquisa" placeholder="Pesquisar no seu cofre...">
+            </div>
+
+            <div class="perfil-usuario">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+        <section class="secao-filtros">
+            <div class="grupo-filtros">
+                <div class="filtro-item">
+                    <span>Classificar por:</span>
+                    <button class="btn-filtro" id="filtro-nome">
+                        Nome <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+
+                <div class="filtro-item">
+                    <span>Exibir:</span>
+                    <button class="btn-filtro" id="filtro-exibicao">
+                        Todos os registros <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn-adicionar">
+                <i class="fas fa-plus"></i> Novo Item
+            </button>
+        </section>
+        <section class="area-trabalho">
+            <p>Selecione uma opção no menu lateral.</p>
+        </section>
+    </main>
+
+
+    <div class="sobreposicao-modal" id="modal-item">
+        <div class="conteudo-modal">
+            <div class="cabecalho-modal">
+                <h2>Novo Registro</h2>
+                <button class="btn-fechar" id="fechar-modal">&times;</button>
+            </div>
+
+            <form class="formulario-modal" id="form-cadastro">
+                <div class="campo-grupo">
+                    <label>Categoria</label>
+                    <div class="linha-flex">
+                        <select name="categoria" id="categoria-item">
+                            <option value="senhas">Senhas</option>
+                            <option value="financeiro">Financeiro</option>
+                        </select>
+                        <button type="button" class="btn-acao-pequeno" onclick="criarNovaCategoria()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="campo-grupo" id="grupo-categoria">
+                    <label>Categoria</label>
+
+                    <div class="linha-flex" id="container-seletor-categoria">
+                        <button type="button" class="btn-acao-pequeno" onclick="alternarModoCategoria(true)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <div class="linha-flex" id="container-nova-categoria" style="display: none;">
+                        <input type="text" id="novo-nome-categoria" placeholder="Nome da categoria..." style="flex: 2;">
+                        <input type="color" id="cor-categoria" value="#ffc107"
+                            style="width: 40px; padding: 2px; cursor: pointer;">
+                        <button type="button" class="btn-acao-pequeno" onclick="confirmarNovaCategoria()"
+                            style="background-color: var(--cor-primaria);">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button type="button" class="btn-remover" onclick="alternarModoCategoria(false)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="container-campos-dinamicos"></div>
+
+                <div class="botoes-adicionar-campo">
+                    <button type="button" class="btn-add-campo" onclick="adicionarCampo(false)">
+                        <i class="fas fa-font"></i> + Texto
+                    </button>
+                    <button type="button" class="btn-add-campo" onclick="adicionarCampo(true)">
+                        <i class="fas fa-lock"></i> + Senha
+                    </button>
+                </div>
+
+                <div class="acoes-modal">
+                    <button type="button" class="btn-cancelar" id="cancelar-modal">Cancelar</button>
+                    <button type="submit" class="btn-salvar">Salvar no Banco</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
