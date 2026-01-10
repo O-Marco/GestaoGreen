@@ -1,188 +1,171 @@
-// Aguarda o carregamento total do documento
+/**
+ * SEÇÃO 1: SELEÇÃO DE ELEMENTOS E ESTADO INICIAL
+ * Capturamos todos os elementos que serão manipulados via JS.
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Seleção dos elementos principais
+    // Elementos da Sidebar
     const sidebar = document.getElementById('sidebar');
     const btnAlternar = document.getElementById('btn-alternar');
     const itensMenu = document.querySelectorAll('.item-menu');
 
+    // Elementos do Modal
+    const modal = document.getElementById('modal-item');
+    const btnNovoItem = document.querySelector('.btn-adicionar');
+    const btnFecharX = document.getElementById('fechar-modal');
+    const btnCancelar = document.getElementById('cancelar-modal');
+    const formCadastro = document.getElementById('form-cadastro');
+    const containerDinamico = document.getElementById('container-campos-dinamicos');
+
     /**
-     * SEÇÃO: CONTROLE DO MENU
-     * Alterna a classe 'aberta' na sidebar
+     * SEÇÃO 2: CONTROLE DA BARRA LATERAL (SIDEBAR)
+     * Gerencia a abertura/fechamento e qual item está selecionado.
      */
     btnAlternar.addEventListener('click', () => {
         sidebar.classList.toggle('aberta');
     });
 
-    /**
-     * SEÇÃO: NAVEGAÇÃO
-     * Gerencia qual item do menu está ativo (selecionado)
-     */
     itensMenu.forEach(item => {
-        item.addEventListener('click', (evento) => {
-            // Remove a classe ativo de todos os itens
+        item.addEventListener('click', () => {
             itensMenu.forEach(i => i.classList.remove('ativo'));
-            
-            // Adiciona a classe ativo apenas no item clicado
             item.classList.add('ativo');
         });
     });
 
-});
+    /**
+     * SEÇÃO 3: CONTROLE DE EXIBIÇÃO DO MODAL
+     * Funções para abrir e limpar/fechar a janela de novo item.
+     */
+    const fecharModal = () => {
+        modal.classList.remove('ativo');
+        formCadastro.reset(); // Limpa os textos digitados
+        containerDinamico.innerHTML = ''; // Remove campos extras de usuário/senha
+    };
 
-/**
- * SEÇÃO: FUNCIONALIDADE DE PESQUISA
- * Detecta quando o usuário digita no campo de busca
- */
-const campoPesquisa = document.getElementById('campo-pesquisa');
+    btnNovoItem.addEventListener('click', () => {
+        modal.classList.add('ativo');
+    });
 
-campoPesquisa.addEventListener('input', (e) => {
-    const termoBusca = e.target.value.toLowerCase();
+    // Eventos para fechar (Botão X, Botão Cancelar e clicar fora)
+    if (btnFecharX) btnFecharX.addEventListener('click', fecharModal);
+    if (btnCancelar) btnCancelar.addEventListener('click', fecharModal);
     
-    // Por enquanto, apenas mostra no console o que está sendo digitado
-    // No próximo passo, usaremos isso para filtrar a lista de itens
-    console.log("Buscando por:", termoBusca);
-});
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) fecharModal();
+    });
 
-/**
- * SEÇÃO: LOGICA DOS FILTROS
- * Gerencia os cliques nos botões de classificação e o botão de adicionar
- */
-const btnFiltroNome = document.getElementById('filtro-nome');
-const btnAdicionar = document.querySelector('.btn-adicionar');
+    /**
+     * SEÇÃO 4: FUNCIONALIDADE DE PESQUISA
+     * Monitora o que o usuário digita na barra de busca superior.
+     */
+    const campoPesquisa = document.getElementById('campo-pesquisa');
+    campoPesquisa.addEventListener('input', (e) => {
+        const termoBusca = e.target.value.toLowerCase();
+        console.log("Filtrando por:", termoBusca);
+    });
 
-btnFiltroNome.addEventListener('click', () => {
-    // Aqui no futuro abriremos um menu suspenso (dropdown)
-    alert('Opções de classificação: A-Z, Recentes, etc.');
-});
+    /**
+     * SEÇÃO 5: LOGICA DO FORMULÁRIO (SUBMIT)
+     * Coleta os dados fixos e dinâmicos e transforma em JSON para o banco.
+     */
+    formCadastro.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-btnAdicionar.addEventListener('click', () => {
-    console.log('Abrindo formulário de novo item...');
-    // No futuro, aqui chamaremos a função para abrir um Modal (janela flutuante)
-});
+        // Captura Título e Categoria (agora pegando do seu novo input)
+        const dadosParaBanco = {
+            titulo: this.titulo.value,
+            categoria: this.categoria.value,
+            camposExtras: []
+        };
 
-/**
- * SEÇÃO: CONTROLE DO MODAL
- */
-const modal = document.getElementById('modal-item');
-const btnNovoItem = document.querySelector('.btn-adicionar');
-const btnFechar = document.getElementById('fechar-modal');
-const btnCancelar = document.getElementById('cancelar-modal');
+        // Varre os campos dinâmicos criados pela função adicionarCampo
+        const camposDinamicos = document.querySelectorAll('.campo-dinamico');
+        camposDinamicos.forEach(div => {
+            const input = div.querySelector('.js-valor');
+            dadosParaBanco.camposExtras.push({
+                valor: input.value,
+                protegido: input.getAttribute('data-protegido') === 'true'
+            });
+        });
 
-// Função para abrir
-btnNovoItem.addEventListener('click', () => {
-    modal.classList.add('ativo');
-});
-
-// Funções para fechar
-const fecharModal = () => modal.classList.remove('ativo');
-
-btnFechar.addEventListener('click', fecharModal);
-btnCancelar.addEventListener('click', fecharModal);
-
-// Fechar ao clicar fora da janela branca
-window.addEventListener('click', (e) => {
-    if (e.target === modal) fecharModal();
+        console.log("Objeto pronto para salvar:", dadosParaBanco);
+        alert('Item estruturado com sucesso!');
+        fecharModal();
+    });
 });
 
 /**
  * SEÇÃO: CAMPOS DINÂMICOS
- * Adiciona campos que o banco de dados receberá como um Array de objetos
+ * Adiciona campos de Usuário ou Senha com funcionalidade de exibir/ocultar
  */
 function adicionarCampo(comSenha) {
     const container = document.getElementById('container-campos-dinamicos');
     const tipoInput = comSenha ? 'password' : 'text';
-    const rotulo = comSenha ? 'Senha' : 'Usuário/Info';
+    const rotulo = comSenha ? 'SENHA' : 'USUÁRIO/INFO';
 
     const div = document.createElement('div');
     div.className = 'campo-grupo campo-dinamico';
     
-    // Usamos classes específicas (js-valor e js-tipo) para coletar os dados depois
+    // HTML do botão de olho (somente se for senha)
+    const botaoOlho = comSenha ? `
+        <button type="button" class="btn-ver-senha" onclick="alternarSenha(this)">
+            <i class="fas fa-eye"></i>
+        </button>` : '';
+
     div.innerHTML = `
         <div class="linha-flex" style="justify-content: space-between; align-items: flex-end;">
-            <label style="font-size: 11px; color: var(--cor-amarela);">${rotulo.toUpperCase()}</label>
+            <label style="font-size: 11px; color: var(--cor-amarela); font-weight: bold;">${rotulo}</label>
             <button type="button" class="btn-remover" onclick="this.closest('.campo-dinamico').remove()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <input type="${tipoInput}" class="input-dados js-valor" data-protegido="${comSenha}" placeholder="Insira o valor...">
+        <div class="input-container">
+            <input type="${tipoInput}" class="input-dados js-valor" data-protegido="${comSenha}" placeholder="Insira o valor...">
+            ${botaoOlho}
+        </div>
     `;
 
     container.appendChild(div);
 }
 
 /**
- * SEÇÃO: PREPARAÇÃO PARA O BANCO DE DADOS
- * Captura todos os campos e transforma em um objeto JSON
+ * Função para alternar a visibilidade da senha
  */
-document.getElementById('form-cadastro').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // 1. Captura campos fixos
-    // Certifique-se de que o select tenha name="categoria" e o input tenha name="titulo" no HTML
-    const dadosParaBanco = {
-        titulo: this.titulo.value,
-        categoria: this.categoria.value, // Captura o valor selecionado no <select>
-        camposExtras: []
-    };
-
-    // 2. Captura campos dinâmicos (varredura)
-    const camposDinamicos = document.querySelectorAll('.campo-dinamico'); //
-    camposDinamicos.forEach(div => {
-        const input = div.querySelector('.js-valor'); //
-        dadosParaBanco.camposExtras.push({
-            valor: input.value,
-            protegido: input.getAttribute('data-protegido') === 'true' //
-        });
-    });
-
-    console.log("Enviando para o Banco:", dadosParaBanco); //
+function alternarSenha(botao) {
+    const input = botao.parentElement.querySelector('input');
+    const icone = botao.querySelector('i');
     
-    alert('Dados estruturados com sucesso! Verifique o console (F12).');
-    fecharModal(); // Função que fecha o modal após salvar
-});
-
-/**
- * Alterna entre o Dropdown e o Campo de Digitação
- */
-function alternarModoCategoria(mostrarInput) {
-    const seletor = document.getElementById('container-seletor-categoria');
-    const entrada = document.getElementById('container-nova-categoria');
-    
-    if (mostrarInput) {
-        seletor.style.display = 'none';
-        entrada.style.display = 'flex';
-        document.getElementById('novo-nome-categoria').focus();
+    if (input.type === 'password') {
+        input.type = 'text';
+        icone.classList.replace('fa-eye', 'fa-eye-slash');
     } else {
-        seletor.style.display = 'flex';
-        entrada.style.display = 'none';
-        document.getElementById('novo-nome-categoria').value = '';
+        input.type = 'password';
+        icone.classList.replace('fa-eye-slash', 'fa-eye');
     }
 }
 
 /**
- * Adiciona a nova categoria ao Select e guarda a cor (no console por enquanto)
+ * Função para alternar entre mostrar/esconder senha
  */
-function confirmarNovaCategoria() {
-    const inputNome = document.getElementById('novo-nome-categoria');
-    const inputCor = document.getElementById('cor-categoria');
-    const nome = inputNome.value.trim();
-    const cor = inputCor.value;
-
-    if (nome !== "") {
-        const select = document.getElementById('categoria-item');
-        const novaOpcao = document.createElement('option');
-        
-        novaOpcao.value = nome.toLowerCase().replace(/\s+/g, '-');
-        novaOpcao.textContent = nome;
-        novaOpcao.dataset.cor = cor; // Guarda a cor escolhida no elemento
-
-        select.appendChild(novaOpcao);
-        novaOpcao.selected = true;
-
-        console.log(`Categoria criada: ${nome} com a cor: ${cor}`);
-        alternarModoCategoria(false);
+function alternarVisibilidade(botao) {
+    const input = botao.previousElementSibling;
+    const icone = botao.querySelector('i');
+    
+    if (input.type === "password") {
+        input.type = "text";
+        icone.classList.replace('fa-eye', 'fa-eye-slash');
     } else {
-        inputNome.focus();
+        input.type = "password";
+        icone.classList.replace('fa-eye-slash', 'fa-eye');
     }
+}
+
+/**
+ * SEÇÃO 7: BOTÕES DE FILTRO (PLACEHOLDERS)
+ * Ações para os botões de classificação da lista.
+ */
+const btnFiltroNome = document.getElementById('filtro-nome');
+if (btnFiltroNome) {
+    btnFiltroNome.addEventListener('click', () => {
+        alert('Ordenando por Nome...');
+    });
 }

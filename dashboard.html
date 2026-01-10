@@ -14,7 +14,6 @@
     <aside class="barra-lateral" id="sidebar">
         <div class="cabecalho-sidebar">
             <div class="logo">GR<br>Dash</div>
-
             <button class="btn-hamburguer" id="btn-alternar">
                 <i class="fas fa-bars"></i>
             </button>
@@ -41,16 +40,17 @@
     </aside>
 
     <main class="conteudo-principal">
+        
         <header class="topo-conteudo">
             <div class="container-pesquisa">
                 <i class="fas fa-search icone-pesquisa"></i>
                 <input type="text" id="campo-pesquisa" placeholder="Pesquisar no seu cofre...">
             </div>
-
             <div class="perfil-usuario">
                 <i class="fas fa-user-circle"></i>
             </div>
         </header>
+
         <section class="secao-filtros">
             <div class="grupo-filtros">
                 <div class="filtro-item">
@@ -72,70 +72,42 @@
                 <i class="fas fa-plus"></i> Novo Item
             </button>
         </section>
-        <section class="area-trabalho">
-            <p>Selecione uma opção no menu lateral.</p>
-        </section>
-    </main>
 
+        <section id="area-trabalho" class="area-trabalho">
+            </section>
+    </main>
 
     <div class="sobreposicao-modal" id="modal-item">
         <div class="conteudo-modal">
             <div class="cabecalho-modal">
                 <h2>Novo Registro</h2>
-                <button class="btn-fechar" id="fechar-modal">&times;</button>
             </div>
 
-            <form class="formulario-modal" id="form-cadastro">
+            <form id="form-cadastro">
                 <div class="campo-grupo">
-                    <label>Categoria</label>
-                    <div class="linha-flex">
-                        <select name="categoria" id="categoria-item">
-                            <option value="senhas">Senhas</option>
-                            <option value="financeiro">Financeiro</option>
-                        </select>
-                        <button type="button" class="btn-acao-pequeno" onclick="criarNovaCategoria()">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+                    <label>TÍTULO</label>
+                    <input type="text" name="titulo" placeholder="Ex: Conta Google, Netflix..." required>
                 </div>
 
-                <div class="campo-grupo" id="grupo-categoria">
-                    <label>Categoria</label>
-
-                    <div class="linha-flex" id="container-seletor-categoria">
-                        <button type="button" class="btn-acao-pequeno" onclick="alternarModoCategoria(true)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-
-                    <div class="linha-flex" id="container-nova-categoria" style="display: none;">
-                        <input type="text" id="novo-nome-categoria" placeholder="Nome da categoria..." style="flex: 2;">
-                        <input type="color" id="cor-categoria" value="#ffc107"
-                            style="width: 40px; padding: 2px; cursor: pointer;">
-                        <button type="button" class="btn-acao-pequeno" onclick="confirmarNovaCategoria()"
-                            style="background-color: var(--cor-primaria);">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button type="button" class="btn-remover" onclick="alternarModoCategoria(false)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+                <div class="campo-grupo">
+                    <label>CATEGORIA</label>
+                    <input type="text" name="categoria" placeholder="Ex: Redes Sociais, Banco, Trabalho..." required>
                 </div>
 
                 <div id="container-campos-dinamicos"></div>
 
-                <div class="botoes-adicionar-campo">
-                    <button type="button" class="btn-add-campo" onclick="adicionarCampo(false)">
-                        <i class="fas fa-font"></i> + Texto
+                <div class="acoes-campos-extras">
+                    <button type="button" class="btn-extra" onclick="adicionarCampo(false)">
+                        <i class="fas fa-user"></i> + Usuário
                     </button>
-                    <button type="button" class="btn-add-campo" onclick="adicionarCampo(true)">
-                        <i class="fas fa-lock"></i> + Senha
+                    <button type="button" class="btn-extra" onclick="adicionarCampo(true)">
+                        <i class="fas fa-key"></i> + Senha
                     </button>
                 </div>
 
-                <div class="acoes-modal">
-                    <button type="button" class="btn-cancelar" id="cancelar-modal">Cancelar</button>
-                    <button type="submit" class="btn-salvar">Salvar no Banco</button>
+                <div class="rodape-modal">
+                    <button type="button" id="cancelar-modal" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-salvar">Salvar Registro</button>
                 </div>
             </form>
         </div>
