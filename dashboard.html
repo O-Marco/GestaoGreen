@@ -55,9 +55,64 @@
     </aside>
 
     <main class="conteudo-principal">
-    </main>
+        <header class="header-dash">
+            <div class="busca-container">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Pesquisar senhas, sites ou notas..." id="input-busca">
+            </div>
 
-    <main class="conteudo-principal">
+            <div class="acoes-header">
+                <button class="btn-adicionar">
+                    <i class="fas fa-plus"></i>
+                    <span>Novo Registro</span>
+                </button>
+                <button class="btn-logout" title="Sair do Sistema">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="grid-senhas">
+            <div class="card-senha">
+                <div class="card-info">
+                    <div class="servico-icone">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="servico-detalhes">
+                        <span class="servico-nome">Google</span>
+                        <span class="servico-login">usuario@gmail.com</span>
+                    </div>
+                </div>
+                <div class="card-acoes">
+                    <button class="btn-copiar" title="Copiar Senha">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="btn-opcoes">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-senha">
+                <div class="card-info">
+                    <div class="servico-icone icone-netflix">
+                        <i class="fab fa-netflix"></i>
+                    </div>
+                    <div class="servico-detalhes">
+                        <span class="servico-nome">Netflix</span>
+                        <span class="servico-login">familia@email.com</span>
+                    </div>
+                </div>
+                <div class="card-acoes">
+                    <button class="btn-copiar" title="Copiar Senha">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="btn-opcoes">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script src="dashboard.js"></script>
