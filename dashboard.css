@@ -1,452 +1,174 @@
-/**
- * SEÇÃO 1: CONFIGURAÇÕES GERAIS E VARIÁVEIS
- * Define as cores globais, tipografia e o comportamento básico do corpo do site.
- */
+/* ================================================================
+   BARRA LATERAL (SIDEBAR) - ESTILO MINIMALISTA COM SETA NO RODAPÉ
+   ================================================================ */
+
 :root {
-    --cor-primaria: #00ffaa;
-    --cor-fundo-escuro: #161617;
-    --cor-amarela: #ffc107;
-    --cor-texto-suave: #888;
+    /* Paleta Profissional: Dark Slate & Emerald */
+    --bg-main: #0f1113;
+    --bg-sidebar: #161b22;
+    --bg-item-hover: rgba(255, 255, 255, 0.05);
+    
+    /* Cores de Destaque Minimalistas */
+    --accent-color: #2ea043;      /* Verde GitHub (mais sóbrio) */
+    --accent-soft: rgba(46, 160, 67, 0.15);
+    --border-color: rgba(255, 255, 255, 0.08);
+    
+    --text-bright: #f0f6fc;
+    --text-muted: #8b949e;
+    
+    --sb-width-collapsed: 78px;
+    --sb-width-expanded: 260px;
+    
+    --anim-speed: 0.3s;
+    --anim-curve: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    font-family: 'Inter', sans-serif;
-    background-color: #f9f9f9;
-}
-
-.corpo-dashboard {
-    display: flex;
-    overflow: hidden; /* Evita barras de rolagem duplas no layout principal */
-}
-
-/**
- * SEÇÃO 2: BARRA LATERAL (SIDEBAR)
- * Estilos para a navegação esquerda, incluindo a animação de abrir/fechar.
- */
-.barra-lateral {
-    width: 80px; 
-    background-color: var(--cor-fundo-escuro);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    transition: width 0.3s ease;
-    flex-shrink: 0;
+    margin: 0; padding: 0; height: 100vh;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-bright);
     overflow: hidden;
 }
 
-.barra-lateral.aberta {
-    width: 240px;
+/* ESTRUTURA DA SIDEBAR */
+.barra-lateral {
+    position: fixed; left: 0; top: 0; height: 100vh;
+    width: var(--sb-width-collapsed);
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex; flex-direction: column;
+    padding: 20px 12px;
+    transition: width var(--anim-speed) var(--anim-curve);
+    z-index: 1000; overflow: hidden; box-sizing: border-box;
 }
 
+.barra-lateral.aberta { width: var(--sb-width-expanded); }
+
+/* CABEÇALHO (LOGO) */
 .cabecalho-sidebar {
-    padding: 20px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex; align-items: center; 
+    height: 50px; margin-bottom: 30px;
+    position: relative;
 }
 
-.logo {
-    color: var(--cor-primaria);
-    font-weight: 800;
-    font-size: 14px;
-    text-align: center;
-    margin-bottom: 20px;
+.logo-container {
+    display: flex; align-items: center;
+    min-width: 180px; transition: 0.3s;
 }
 
-.btn-hamburguer {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background-color: var(--cor-amarela);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
+.logo-icone {
+    background: var(--accent-color); color: #fff;
+    min-width: 42px; height: 42px; display: flex;
+    align-items: center; justify-content: center;
+    border-radius: 10px; font-weight: 700;
 }
 
-.btn-hamburguer:hover { transform: scale(1.1); }
+.logo-texto {
+    font-size: 20px; font-weight: 600; color: var(--text-bright);
+    margin-left: 15px; white-space: nowrap;
+    opacity: 0; transition: 0.2s;
+}
+.barra-lateral.aberta .logo-texto { opacity: 1; }
+
+/* NAVEGAÇÃO */
+.menu-navegacao { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 
 .item-menu {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--cor-texto-suave);
-    height: 55px;
-    padding-left: 30px;
-    transition: 0.3s;
-    white-space: nowrap;
+    display: flex; align-items: center; padding: 12px;
+    color: var(--text-muted); text-decoration: none;
+    border-radius: 8px; transition: 0.2s; white-space: nowrap;
 }
 
-.item-menu i {
-    font-size: 20px;
-    min-width: 25px;
-    text-align: center;
-}
+.item-menu i { font-size: 18px; min-width: 30px; text-align: center; }
 
-.item-menu span {
-    margin-left: 20px;
-    font-size: 15px;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.barra-lateral.aberta .item-menu span { opacity: 1; }
-
-.item-menu:hover {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.item-menu.ativo {
-    color: #fff;
-    border-left: 4px solid var(--cor-primaria);
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/**
- * SEÇÃO 3: CABEÇALHO SUPERIOR E PESQUISA
- * Estiliza a barra de busca e o perfil do usuário.
- */
-.conteudo-principal {
-    flex: 1;
-    padding: 40px;
-    overflow-y: auto;
-}
-
-.topo-conteudo {
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.container-pesquisa {
-    display: flex;
-    align-items: center;
-    background-color: #f1f3f4;
-    padding: 8px 15px;
-    border-radius: 8px;
-    width: 400px;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-}
-
-.container-pesquisa:focus-within {
-    background-color: #fff;
-    border-color: var(--cor-amarela);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.icone-pesquisa {
-    color: #5f6368;
-    margin-right: 10px;
-    font-size: 16px;
-}
-
-#campo-pesquisa {
-    border: none;
-    background: transparent;
-    outline: none;
-    width: 100%;
-    font-size: 15px;
-}
-
-.perfil-usuario {
-    font-size: 28px;
-    color: var(--cor-fundo-escuro);
-    cursor: pointer;
-}
-
-/**
- * SEÇÃO 4: ÁREA DE FILTROS E BOTÃO NOVO ITEM
- * Organiza os filtros de visualização e o botão principal de adição.
- */
-.secao-filtros {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #eee;
-}
-
-.grupo-filtros { display: flex; gap: 30px; }
-
-.filtro-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    color: #666;
-}
-
-.btn-filtro {
-    background: none;
-    border: none;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: color 0.2s;
-}
-
-.btn-filtro:hover { color: var(--cor-amarela); }
-
-.btn-adicionar {
-    background-color: var(--cor-fundo-escuro);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.2s;
-}
-
-.btn-adicionar:hover {
-    background-color: #2a2a2b;
-    transform: translateY(-2px);
-}
-
-.btn-adicionar i { color: var(--cor-primaria); }
-
-/**
- * SEÇÃO 5: ESTRUTURA DO MODAL (OVERLAY)
- * Camada que escurece o fundo e centraliza o formulário na tela.
- */
-.sobreposicao-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
+.texto-link { 
+    opacity: 0; transition: 0.2s; font-size: 14px; 
+    margin-left: 12px; font-weight: 500;
     display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    backdrop-filter: blur(5px);
 }
+.barra-lateral.aberta .texto-link { opacity: 1; display: block; }
 
-.sobreposicao-modal.ativo { display: flex; }
+.item-menu:hover { background: var(--bg-item-hover); color: var(--text-bright); }
+.item-menu.ativo { background: var(--accent-soft); color: var(--accent-color); }
 
-.conteudo-modal {
-    background-color: #ffffff;
-    width: 100%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-}
-
-/**
- * SEÇÃO 6: ELEMENTOS DO FORMULÁRIO (DENTRO DO MODAL)
- * Inputs, Labels e o design dos botões de ação.
- */
-/* Container que agrupa o Label e o Input */
-.campo-grupo {
-    margin-bottom: 20px;
+/* RODAPÉ E SETA DE ALTERNÂNCIA */
+.rodape-sidebar { 
+    border-top: 1px solid var(--border-color); 
+    padding-top: 15px;
     display: flex;
     flex-direction: column;
-}
-
-/* Rótulos dos campos (Títulos pequenos acima do input) */
-.campo-grupo label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--cor-texto-suave);
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase; /* Mantém o padrão visual de sistema */
-}
-
-/* Estilo dos campos de entrada e seletores */
-.campo-grupo input, 
-.campo-grupo select {
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-/* Efeito de destaque ao clicar ou focar no campo */
-.campo-grupo input:focus {
-    border-color: var(--cor-amarela);
-}
-
-.input-dados:focus { border-color: var(--cor-amarela); }
-
-.btn-fechar {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #ccc;
-    float: right; /* Alinha o X no topo direito */
-}
-
-.btn-fechar:hover { color: #ff4d4d; }
-
-/**
- * SEÇÃO 7: CAMPOS DINÂMICOS E RODAPÉ
- * Regras para os campos de usuário/senha criados via JS e botões finais.
- */
-.acoes-campos-extras {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.btn-extra {
-    background: none;
-    border: 1px dashed #ccc;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    color: #666;
-}
-
-.btn-extra:hover { border-color: var(--cor-primaria); color: var(--cor-primaria); }
-
-.campo-dinamico {
-    margin-top: 15px;
-    animation: fadeIn 0.3s ease;
-}
-
-.linha-flex {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
 }
 
-.btn-remover {
-    background: #eee;
-    border: none;
-    width: 22px;
-    height: 22px;
-    border-radius: 4px;
+.btn-toggle-seta {
+    background: var(--bg-item-hover);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 15px;
+    transition: all var(--anim-speed) ease;
 }
 
-.btn-remover:hover { background: #ff4d4d; color: white; }
-
-.rodape-modal {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 20px;
+.btn-toggle-seta:hover {
+    background: var(--accent-color);
+    color: #fff;
 }
 
-.btn-cancelar {
-    background: none;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    font-weight: 600;
+/* Roda a seta 180 graus quando aberta */
+.barra-lateral.aberta .btn-toggle-seta {
+    transform: rotate(180deg);
+    align-self: flex-end; /* Encosta na direita quando aberto */
 }
 
-.btn-salvar {
-    background-color: var(--cor-fundo-escuro);
-    color: var(--cor-primaria);
-    border: 1px solid var(--cor-primaria);
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/**
- * ícone de olho
- * ícone de olho
- */
-
-.input-wrapper {
-    position: relative;
+/* PERFIL USUÁRIO */
+.perfil-usuario {
+    display: flex; align-items: center; padding: 8px;
+    background: rgba(255, 255, 255, 0.03); border-radius: 12px;
+    cursor: pointer; transition: 0.2s;
     width: 100%;
+    box-sizing: border-box;
 }
 
-/* Estilo do botão do olhinho */
-.btn-ver-senha {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #888;
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.2s;
-    display: flex;
-    align-items: center;
+.avatar-container { 
+    position: relative; min-width: 36px; height: 36px; 
+    background: #30363d; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-bright); font-size: 12px; font-weight: 600;
 }
 
-.btn-ver-senha:hover {
-    color: var(--cor-amarela);
+.status-online {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 10px; height: 10px; background: var(--accent-color);
+    border: 2px solid var(--bg-sidebar); border-radius: 50%;
 }
 
-/* Garante que o texto da senha não fique embaixo do ícone */
-.input-wrapper .input-dados {
-    padding-right: 40px;
+.info-usuario { 
+    display: flex; flex-direction: column; margin-left: 12px;
+    opacity: 0; transition: 0.2s; overflow: hidden;
+    display: none;
 }
+.barra-lateral.aberta .info-usuario { opacity: 1; display: flex; }
 
-/* Container do input para permitir posicionamento do ícone */
-.input-container {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
+.nome-usuario { font-size: 13px; font-weight: 600; white-space: nowrap; }
+.plano-usuario { font-size: 11px; color: var(--text-muted); }
 
-/* Ajuste no input para o texto não ficar embaixo do ícone */
-.input-container .input-dados {
-    padding-right: 40px; /* Abre espaço na direita para o olho */
-    width: 100%;
+.btn-config {
+    background: transparent; border: none; color: var(--text-muted);
+    cursor: pointer; margin-left: auto; display: none;
 }
+.barra-lateral.aberta .btn-config { display: block; }
 
-/* Estilo do botão do olho dentro da barra */
-.btn-ver-senha {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    color: #888;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: color 0.2s;
+/* CONTEÚDO PRINCIPAL */
+.conteudo-principal {
+    margin-left: var(--sb-width-collapsed);
+    transition: margin-left var(--anim-speed) var(--anim-curve);
+    padding: 30px;
 }
-
-.btn-ver-senha:hover {
-    color: var(--cor-amarela);
-}
+.barra-lateral.aberta + .conteudo-principal { margin-left: var(--sb-width-expanded); }

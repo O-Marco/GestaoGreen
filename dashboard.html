@@ -13,105 +13,52 @@
 
     <aside class="barra-lateral" id="sidebar">
         <div class="cabecalho-sidebar">
-            <div class="logo">GR<br>Dash</div>
-            <button class="btn-hamburguer" id="btn-alternar">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="logo-container">
+                <div class="logo-icone">GR</div>
+                <span class="logo-texto">Dash</span>
+            </div>
         </div>
 
         <nav class="menu-navegacao">
-            <a href="#" class="item-menu ativo">
+            <a href="#" class="item-menu ativo" data-secao="cofre">
                 <i class="fas fa-vault"></i>
-                <span>Meu Cofre</span>
+                <span class="texto-link">Meu Cofre</span>
             </a>
-            <a href="#" class="item-menu">
-                <i class="fas fa-credit-card"></i>
-                <span>Cartões</span>
+            <a href="#" class="item-menu" data-secao="lista">
+                <i class="fas fa-list-ul"></i>
+                <span class="texto-link">Lista</span>
             </a>
-            <a href="#" class="item-menu">
-                <i class="fas fa-user-shield"></i>
-                <span>Identidades</span>
-            </a>
-            <a href="#" class="item-menu">
-                <i class="fas fa-trash"></i>
-                <span>Lixeira</span>
+            <a href="#" class="item-menu btn-lixeira" data-secao="lixeira">
+                <i class="fas fa-trash-alt"></i>
+                <span class="texto-link">Lixeira</span>
             </a>
         </nav>
+
+        <div class="rodape-sidebar">
+            <button class="btn-toggle-seta" id="btn-alternar" title="Alternar Menu">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="perfil-usuario">
+                <div class="avatar-container">
+                    US <div class="status-online"></div>
+                </div>
+                <div class="info-usuario">
+                    <span class="nome-usuario">Seu Nome</span>
+                    <span class="plano-usuario">Plano...</span>
+                </div>
+                <button class="btn-config" title="Configurações">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
     </aside>
 
     <main class="conteudo-principal">
-        
-        <header class="topo-conteudo">
-            <div class="container-pesquisa">
-                <i class="fas fa-search icone-pesquisa"></i>
-                <input type="text" id="campo-pesquisa" placeholder="Pesquisar no seu cofre...">
-            </div>
-            <div class="perfil-usuario">
-                <i class="fas fa-user-circle"></i>
-            </div>
-        </header>
-
-        <section class="secao-filtros">
-            <div class="grupo-filtros">
-                <div class="filtro-item">
-                    <span>Classificar por:</span>
-                    <button class="btn-filtro" id="filtro-nome">
-                        Nome <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-
-                <div class="filtro-item">
-                    <span>Exibir:</span>
-                    <button class="btn-filtro" id="filtro-exibicao">
-                        Todos os registros <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-            </div>
-
-            <button class="btn-adicionar">
-                <i class="fas fa-plus"></i> Novo Item
-            </button>
-        </section>
-
-        <section id="area-trabalho" class="area-trabalho">
-            </section>
     </main>
 
-    <div class="sobreposicao-modal" id="modal-item">
-        <div class="conteudo-modal">
-            <div class="cabecalho-modal">
-                <h2>Novo Registro</h2>
-            </div>
-
-            <form id="form-cadastro">
-                <div class="campo-grupo">
-                    <label>TÍTULO</label>
-                    <input type="text" name="titulo" placeholder="Ex: Conta Google, Netflix..." required>
-                </div>
-
-                <div class="campo-grupo">
-                    <label>CATEGORIA</label>
-                    <input type="text" name="categoria" placeholder="Ex: Redes Sociais, Banco, Trabalho..." required>
-                </div>
-
-                <div id="container-campos-dinamicos"></div>
-
-                <div class="acoes-campos-extras">
-                    <button type="button" class="btn-extra" onclick="adicionarCampo(false)">
-                        <i class="fas fa-user"></i> + Usuário
-                    </button>
-                    <button type="button" class="btn-extra" onclick="adicionarCampo(true)">
-                        <i class="fas fa-key"></i> + Senha
-                    </button>
-                </div>
-
-                <div class="rodape-modal">
-                    <button type="button" id="cancelar-modal" class="btn-cancelar">Cancelar</button>
-                    <button type="submit" class="btn-salvar">Salvar Registro</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <main class="conteudo-principal">
+    </main>
 
     <script src="dashboard.js"></script>
 </body>
