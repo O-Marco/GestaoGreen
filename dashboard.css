@@ -102,151 +102,42 @@ body, html {
 .btn-logout:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.2); }
 
 /* ================================================================
-   4. MODAL E FORMULÁRIOS (REVISADO)
+   4. MODAL E FORMULÁRIOS (CORES DE SELEÇÃO)
    ================================================================ */
 
-/* Overlay e Caixa do Modal */
-.modal-overlay { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0, 0, 0, 0.7); 
-    backdrop-filter: blur(4px); 
-    display: none; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 2000; 
-}
+/* Overlay e Caixa */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
+.modal-visivel { display: flex; }
+.modal-caixa { background: var(--bg-sidebar); width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-.modal-visivel { 
-    display: flex; 
-}
-
-.modal-caixa { 
-    background: var(--bg-sidebar); 
-    width: 100%; 
-    max-width: 450px; 
-    padding: 30px; 
-    border-radius: 20px; 
-    border: 1px solid var(--border-color); 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-}
-
-/* Cabeçalho do Modal */
-.modal-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 20px; 
-}
-
-/* Botão Fechar (X) com Hover Vermelho */
-.btn-fechar-modal { 
-    background: none; 
-    border: none; 
-    color: var(--text-muted); 
-    font-size: 24px; 
-    cursor: pointer; 
-    transition: color 0.2s ease;
-}
-
-.btn-fechar-modal:hover { 
-    color: #ff4d4d; /* Vermelho vibrante */
-}
+/* Cabeçalho e Botão Fechar */
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.btn-fechar-modal { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; transition: color 0.2s ease; }
+.btn-fechar-modal:hover { color: #ff4d4d; }
 
 /* Inputs e Selects */
-.grupo-input { 
-    margin-bottom: 15px; 
-}
+.grupo-input { margin-bottom: 15px; }
+.grupo-input label { display: block; color: var(--text-muted); font-size: 13px; margin-bottom: 8px; }
+.grupo-input input, .grupo-input select { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; color: var(--text-bright); outline: none; transition: 0.3s var(--anim-curve); }
+.grupo-input select option { background-color: var(--bg-sidebar); color: var(--text-bright); }
+.grupo-input input:focus, .grupo-input select:focus { border-color: var(--accent-color); background: rgba(255, 255, 255, 0.08); }
 
-.grupo-input label { 
-    display: block; 
-    color: var(--text-muted); 
-    font-size: 13px; 
-    margin-bottom: 8px; 
-}
+/* Botões +Nome e +Senha (Efeito Verde) */
+.seletor-tipo-dado { display: flex; gap: 10px; margin-bottom: 15px; }
+.btn-tipo { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.05); color: var(--text-muted); cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
 
-.grupo-input input, .grupo-input select {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    padding: 12px;
-    border-radius: 8px;
-    color: var(--text-bright);
-    outline: none;
-    transition: 0.3s var(--anim-curve);
-}
+/* Efeito ao passar o mouse */
+.btn-tipo:hover { background: rgba(46, 160, 67, 0.1); border-color: var(--accent-color); color: var(--text-bright); }
 
-.grupo-input input:focus, .grupo-input select:focus { 
-    border-color: var(--accent-color); 
-    background: rgba(255, 255, 255, 0.08); 
-}
+/* Efeito Verde ao Clicar (Active) ou quando Ativo */
+.btn-tipo:active, .btn-tipo.ativo { background: var(--accent-soft) !important; border-color: var(--accent-color) !important; color: var(--accent-color) !important; box-shadow: 0 0 10px rgba(46, 160, 67, 0.2); }
 
-/* Botões de Tipo de Dado */
-.seletor-tipo-dado { 
-    display: flex; 
-    gap: 10px; 
-    margin-bottom: 15px; 
-}
-
-.btn-tipo { 
-    flex: 1; 
-    padding: 10px; 
-    border-radius: 8px; 
-    border: 1px solid var(--border-color); 
-    background: rgba(255, 255, 255, 0.05); 
-    color: var(--text-muted); 
-    cursor: pointer; 
-    font-weight: 600; 
-    transition: 0.3s; 
-}
-
-.btn-tipo.ativo { 
-    background: var(--accent-soft); 
-    border-color: var(--accent-color); 
-    color: var(--accent-color); 
-}
-
-/* Rodapé e Botões de Ação */
-.modal-rodape { 
-    display: flex; 
-    justify-content: flex-end; 
-    gap: 12px; 
-    margin-top: 25px; 
-}
-
-/* Botão Cancelar com Hover Vermelho */
-.btn-cancelar { 
-    background: transparent; 
-    border: none; 
-    color: var(--text-muted); 
-    cursor: pointer; 
-    padding: 10px 15px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
-
-.btn-cancelar:hover { 
-    color: #ff4d4d; /* Texto Vermelho */
-    background: rgba(255, 77, 77, 0.1); /* Fundo sutil vermelho */
-}
-
-.btn-salvar { 
-    background: var(--accent-color); 
-    color: white; 
-    border: none; 
-    padding: 10px 20px; 
-    border-radius: 8px; 
-    font-weight: 600; 
-    cursor: pointer; 
-    transition: filter 0.2s;
-}
-
-.btn-salvar:hover {
-    filter: brightness(1.1);
-}
+/* Rodapé e Ações */
+.modal-rodape { display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px; }
+.btn-cancelar { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 10px 15px; border-radius: 8px; transition: all 0.2s ease; }
+.btn-cancelar:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); }
+.btn-salvar { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: filter 0.2s; }
+.btn-salvar:hover { filter: brightness(1.1); }
 
 /* ================================================================
    5. GRID E CARDS DE SENHA
