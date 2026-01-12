@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão - Login & Registro</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
     <div class="ondas-container">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="onda">
             <path fill="#58b19f" fill-opacity="0.1"
@@ -13,47 +15,41 @@
             </path>
         </svg>
     </div>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
 
-<body>
-    <div class="caixa-login">
-
-        <div class="painel esquerda">
+    <main class="caixa-login">
+        <section class="painel esquerda">
             <div class="conteudo">
                 <h1>Login</h1>
                 <p>Já tem uma conta? Entre agora!</p>
 
                 <form class="formulario">
-                    <input type="text" placeholder="Usuário" class="campo">
-                    <input type="password" placeholder="Senha" class="campo">
+                    <input type="text" placeholder="Usuário" class="campo" required>
+                    <input type="password" placeholder="Senha" class="campo" required>
                     <button type="submit" class="botao-vazado">ENTRAR</button>
                 </form>
             </div>
-        </div>
+        </section>
 
         <div class="circulo-ou">
             <span>OU</span>
         </div>
 
-        <div class="painel direita">
+        <section class="painel direita">
             <div class="conteudo">
                 <h2 class="titulo-registro">Registrar-se</h2>
                 <p class="subtitulo">Ainda não é associado? Registre-se aqui mesmo!</p>
 
                 <form class="formulario">
-                    <input type="text" placeholder="Usuário" class="campo campo-cinza">
-                    <input type="password" placeholder="Senha" class="campo campo-cinza">
-                    <input type="password" placeholder="Repita a senha" class="campo campo-cinza">
-                    <input type="email" placeholder="E-mail" class="campo campo-cinza">
+                    <input type="text" placeholder="Usuário" class="campo campo-cinza" required>
+                    <input type="password" placeholder="Senha" class="campo campo-cinza" required>
+                    <input type="password" placeholder="Repita a senha" class="campo campo-cinza" required>
+                    <input type="email" placeholder="E-mail" class="campo campo-cinza" required>
                     <button type="submit" class="botao-cheio">REGISTRAR-SE</button>
                 </form>
             </div>
-        </div>
+        </section>
+    </main>
 
-    </div>
-
-    <script type="module" src="js.js"></script>
+    <script src="js.js"></script>
 </body>
-
 </html>

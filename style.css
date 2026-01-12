@@ -1,12 +1,13 @@
-/* Variáveis de cores */
+/* =========================================
+   VARIÁVEIS E CONFIGURAÇÃO GLOBAL
+   ========================================= */
 :root {
     --primaria: #58b19f;
     --primaria-escura: #458a7b;
-    --fundo-preto: #050505;     /* Um preto levemente mais rico */
+    --fundo-dark: #0a0f0e;
     --fundo-branco: #ffffff;
     --cinza-claro: #f4f7f6;
-    --texto-branco: #ffffff;
-    --texto-preto: #1a1a1b;
+    --transicao: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 * {
@@ -16,139 +17,138 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* Configuração do fundo e container das ondas */
 body {
-    background-color: var(--fundo-preto);
+    background-color: var(--fundo-dark);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Importante para não dar scroll com as ondas */
+    overflow: hidden;
     position: relative;
 }
 
-/* Container que fixa as ondas na parte inferior da tela */
+/* =========================================
+   BACKGROUND ANIMADO E ONDAS
+   ========================================= */
+
 .ondas-container {
     position: absolute;
     bottom: 0;
-    left: 0;
     width: 100%;
+    z-index: -1;
     line-height: 0;
-    z-index: -1; /* Fica atrás de tudo */
 }
 
 .onda {
     width: 100%;
-    height: auto;
-}
-
-/* Animação opcional: faz a onda balançar levemente */
-@keyframes flutuar {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(15px); }
-    100% { transform: translateY(0); }
-}
-
-.ondas-container svg {
     animation: flutuar 6s ease-in-out infinite;
 }
 
-/* O efeito de Glow (Blur) que já tínhamos, agora combinando com as ondas */
-body::before {
-    content: "";
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: var(--primaria);
-    filter: blur(150px);
-    opacity: 0.1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -2;
+@keyframes flutuar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(15px); }
 }
 
-/* Caixa principal */
+/* =========================================
+   CARD PRINCIPAL
+   ========================================= */
 .caixa-login {
     display: flex;
     position: relative;
     width: 1000px;
-    height: 600px;
+    height: 620px;
     background: var(--fundo-branco);
-    border-radius: 24px;
+    border-radius: 28px;
     overflow: hidden;
-    /* Sombreamento mais suave para combinar com o fundo */
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
 
-/* Painéis laterais */
 .painel {
     flex: 1;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
+    padding: 60px;
     text-align: center;
 }
 
 .esquerda {
-    background-color: var(--primaria);
-    color: var(--texto-branco);
+    background: linear-gradient(135deg, var(--primaria), var(--primaria-escura));
+    color: white;
 }
-
-.esquerda h1 { font-size: 42px; margin-bottom: 10px; }
-.esquerda p { margin-bottom: 30px; opacity: 0.9; }
 
 .direita {
     background-color: var(--fundo-branco);
 }
 
-.titulo-registro { color: var(--primaria); font-size: 42px; margin-bottom: 10px; }
-.subtitulo { color: #888; font-size: 14px; margin-bottom: 30px; }
+/* =========================================
+   TEXTOS E TITULOS
+   ========================================= */
+h1, .titulo-registro { font-size: 42px; margin-bottom: 10px; }
+p, .subtitulo { margin-bottom: 30px; font-size: 15px; opacity: 0.8; }
+.titulo-registro { color: var(--primaria); }
+.subtitulo { color: #666; }
 
-/* Formulários e Campos */
+/* =========================================
+   FORMULÁRIOS E INPUTS
+   ========================================= */
 .formulario {
     width: 100%;
     max-width: 320px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px; /* Espaço entre campos */
 }
 
 .campo {
     width: 100%;
-    height: 48px;
-    border-radius: 8px;
-    border: none;
-    padding: 0 15px;
+    height: 52px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    padding: 0 18px;
     font-size: 14px;
-    transition: 0.3s;
+    transition: var(--transicao);
 }
 
-/* Efeito de foco nos campos */
+.campo-cinza { background-color: var(--cinza-claro); color: #333; }
+
 .campo:focus {
-    outline: 2px solid var(--primaria);
+    outline: none;
+    border-color: var(--primaria);
     background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
 }
 
-.campo-cinza {
-    background-color: var(--cinza-claro);
-    color: var(--texto-preto);
+/* =========================================
+   BOTÕES
+   ========================================= */
+.botao-cheio, .botao-vazado {
+    height: 52px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transicao);
+    margin-top: 10px;
 }
 
-/* Botões */
+.botao-cheio {
+    background-color: var(--primaria);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 15px rgba(88, 177, 159, 0.3);
+}
+
+.botao-cheio:hover {
+    background-color: var(--primaria-escura);
+    transform: scale(1.02);
+}
+
 .botao-vazado {
     background: transparent;
     border: 2px solid white;
     color: white;
-    height: 48px;
-    border-radius: 24px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: 0.3s;
 }
 
 .botao-vazado:hover {
@@ -156,40 +156,23 @@ body::before {
     color: var(--primaria);
 }
 
-.botao-cheio {
-    background-color: var(--primaria);
-    color: white;
-    height: 48px;
-    border: none;
-    border-radius: 24px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: 0.3s;
-}
-
-.botao-cheio:hover {
-    background-color: var(--primaria-escura);
-}
-
-/* Divisor central */
+/* =========================================
+   DIVISOR CENTRAL
+   ========================================= */
 .circulo-ou {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     background: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
-    font-size: 14px;
-    color: #666;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-weight: 800;
+    color: #888;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     z-index: 10;
 }
-
-
