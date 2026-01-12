@@ -84,18 +84,32 @@
 
                 <form class="modal-form" id="form-novo-registro">
                     <div class="grupo-input">
-                        <label>Serviço (ex: Google, Netflix)</label>
-                        <input type="text" id="reg-servico" placeholder="Nome do site ou app" required>
+                        <label>Nome do Serviço</label>
+                        <input type="text" id="reg-servico" placeholder="Ex: Google, WiFi Casa..." required>
                     </div>
 
                     <div class="grupo-input">
-                        <label>E-mail ou Usuário</label>
-                        <input type="text" id="reg-login" placeholder="seu@email.com" required>
+                        <label>Categoria</label>
+                        <div class="input-duplo">
+                            <select id="reg-categoria-select">
+                                <option value="Trabalho">Trabalho</option>
+                                <option value="Pessoal">Pessoal</option>
+                                <option value="outra">+ Criar nova...</option>
+                            </select>
+                            <input type="text" id="reg-categoria-nova" placeholder="Qual o nome?"
+                                style="display: none; margin-top: 8px;">
+                        </div>
                     </div>
 
                     <div class="grupo-input">
-                        <label>Ícone (Font Awesome class)</label>
-                        <input type="text" id="reg-icone" placeholder="ex: fab fa-github" value="fas fa-globe">
+                        <label>O que deseja salvar?</label>
+                        <div class="seletor-tipo-dado">
+                            <button type="button" class="btn-tipo" id="add-campo-nome">+ Nome</button>
+                            <button type="button" class="btn-tipo" id="add-campo-senha">+ Senha</button>
+                        </div>
+                    </div>
+
+                    <div id="lista-campos-dinamicos" class="lista-campos-dinamicos">
                     </div>
 
                     <div class="modal-rodape">

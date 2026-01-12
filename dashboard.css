@@ -473,3 +473,217 @@ body, html {
     background: var(--accent-soft);
     color: var(--accent-color);
 }
+
+/* ================================================================
+   SEÇÃO: REFINAMENTO DO FORMULÁRIO E CARDS
+   ================================================================ */
+
+.grupo-input input, .grupo-input select {
+    width: 90%; /* Sua preferência aplicada */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--text-bright);
+    outline: none;
+    transition: all 0.3s var(--anim-curve);
+}
+
+/* Container para o olhinho da senha */
+.campo-senha-container {
+    position: relative;
+    width: 100%;
+}
+
+.btn-input-acao {
+    position: absolute;
+    right: 8%; /* Ajustado por causa dos 95% */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+/* Estilo da Tag de Categoria no Card */
+.tag-categoria {
+    font-size: 10px;
+    background: var(--accent-soft);
+    color: var(--accent-color);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
+/* Botão Deletar no Card (Aparece no Hover) */
+.btn-deletar {
+    color: #ff4d4d;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.card-senha:hover .btn-deletar {
+    opacity: 1;
+}
+
+/* Animação Suave de Entrada */
+@keyframes entradaSuave {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.card-senha {
+    animation: entradaSuave 0.4s ease-out;
+}
+
+/* ================================================================
+   SEÇÃO: BOTÕES DE TIPO E EXCLUIR
+   ================================================================ */
+
+.seletor-tipo-dado {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.btn-tipo {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-tipo.ativo {
+    background: var(--accent-soft);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* BOTÃO EXCLUIR NO CARD */
+.btn-deletar {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-deletar:hover {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+}
+
+/* Ajuste nos inputs para 95% como solicitado */
+.grupo-input input, .grupo-input select {
+    width: 95% !important;
+}
+
+/* ================================================================
+   SEÇÃO: CAMPOS DINÂMICOS (PADRONIZAÇÃO TOTAL)
+   ================================================================ */
+
+.lista-campos-dinamicos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+    max-height: 250px; 
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+/* Scrollbar minimalista */
+.lista-campos-dinamicos::-webkit-scrollbar { width: 5px; }
+.lista-campos-dinamicos::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
+.item-campo-dinamico {
+    background: rgba(255, 255, 255, 0.05); /* Mesma opacidade dos outros inputs */
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px; /* Padronizado com os outros inputs */
+    position: relative;
+    transition: all 0.3s ease;
+    animation: entradaSuave 0.3s ease;
+}
+
+.item-campo-dinamico:focus-within {
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.item-campo-dinamico label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Botão de remover mais discreto para não poluir */
+.btn-remover-campo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+    z-index: 10;
+}
+
+.btn-remover-campo:hover {
+    color: #ff4d4d;
+    transform: scale(1.1);
+}
+
+/* RESET TOTAL DO INPUT INTERNO */
+.item-campo-dinamico input {
+    width: 100% !important;
+    background: transparent !important; /* Remove o fundo branco da imagem */
+    border: none !important;           /* Remove a borda dupla */
+    padding: 5px 0 !important;          /* Espaçamento interno */
+    font-size: 14px !important;
+    color: var(--text-bright) !important;
+    outline: none !important;
+    box-shadow: none !important;        /* Remove sombras de foco do navegador */
+    margin: 0 !important;
+}
+
+/* Placeholder igual aos outros */
+.item-campo-dinamico input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.item-campo-dinamico .campo-senha-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Olhinho da senha alinhado */
+.item-campo-dinamico .btn-input-acao {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
