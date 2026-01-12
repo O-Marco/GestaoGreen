@@ -72,48 +72,44 @@
             </div>
         </header>
 
-        <div class="grid-senhas">
-            <div class="card-senha">
-                <div class="card-info">
-                    <div class="servico-icone">
-                        <i class="fab fa-google"></i>
-                    </div>
-                    <div class="servico-detalhes">
-                        <span class="servico-nome">Google</span>
-                        <span class="servico-login">usuario@gmail.com</span>
-                    </div>
-                </div>
-                <div class="card-acoes">
-                    <button class="btn-copiar" title="Copiar Senha">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                    <button class="btn-opcoes">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
-                </div>
-            </div>
+        <div class="grid-senhas" id="grid-principal">
+        </div>
 
-            <div class="card-senha">
-                <div class="card-info">
-                    <div class="servico-icone icone-netflix">
-                        <i class="fab fa-netflix"></i>
-                    </div>
-                    <div class="servico-detalhes">
-                        <span class="servico-nome">Netflix</span>
-                        <span class="servico-login">familia@email.com</span>
-                    </div>
+        <div class="modal-overlay" id="modal-registro">
+            <div class="modal-caixa">
+                <div class="modal-header">
+                    <h3>Novo Registro</h3>
+                    <button class="btn-fechar-modal" id="btn-fechar">&times;</button>
                 </div>
-                <div class="card-acoes">
-                    <button class="btn-copiar" title="Copiar Senha">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                    <button class="btn-opcoes">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
-                </div>
+
+                <form class="modal-form" id="form-novo-registro">
+                    <div class="grupo-input">
+                        <label>Serviço (ex: Google, Netflix)</label>
+                        <input type="text" id="reg-servico" placeholder="Nome do site ou app" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>E-mail ou Usuário</label>
+                        <input type="text" id="reg-login" placeholder="seu@email.com" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Ícone (Font Awesome class)</label>
+                        <input type="text" id="reg-icone" placeholder="ex: fab fa-github" value="fas fa-globe">
+                    </div>
+
+                    <div class="modal-rodape">
+                        <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+                        <button type="submit" class="btn-salvar">Salvar Registro</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
+
+
+
+
 
     <script src="dashboard.js"></script>
 </body>

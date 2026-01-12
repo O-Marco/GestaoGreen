@@ -2,7 +2,7 @@
    VARIÁVEIS E CONFIGURAÇÃO GLOBAL
    ========================================= */
 :root {
-    --primaria: #58b19f;
+    --primaria: #2ea043;
     --primaria-escura: #458a7b;
     --fundo-dark: #0a0f0e;
     --fundo-branco: #ffffff;
@@ -175,4 +175,22 @@ p, .subtitulo { margin-bottom: 30px; font-size: 15px; opacity: 0.8; }
     color: #888;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     z-index: 10;
+}
+
+/* ---------------------------------------------------------
+   SEÇÃO: FEEDBACK DE INTERAÇÃO
+   Descrição: Estilos para estados de carregamento ou clique.
+   --------------------------------------------------------- */
+
+/* Efeito visual ao clicar no botão de entrar */
+.botao-vazado:active {
+    transform: scale(0.98);
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: 0.2s;
+}
+
+/* Classe utilitária para esconder elementos durante transição, se necessário */
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }

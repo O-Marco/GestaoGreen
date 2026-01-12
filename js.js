@@ -52,3 +52,31 @@ botoes.forEach(botao => {
         botao.style.transform = 'scale(1.02)';
     });
 });
+
+
+/* ---------------------------------------------------------
+   SEÇÃO: GERENCIAMENTO DE ACESSO
+   Descrição: Controla o envio do formulário e o redirecionamento.
+   --------------------------------------------------------- */
+
+// Seleciona o formulário de login (o primeiro formulário da página)
+const formularioLogin = document.querySelector('.esquerda .formulario');
+
+formularioLogin.addEventListener('submit', function(event) {
+    // Impede o recarregamento da página
+    event.preventDefault();
+
+    // Captura os dados (Futuramente você usará isso para validar no Banco de Dados)
+    const usuario = this.querySelector('input[type="text"]').value;
+    const senha = this.querySelector('input[type="password"]').value;
+
+    // Simulação de validação simples
+    if (usuario !== "" && senha !== "") {
+        console.log("Login realizado com sucesso! Redirecionando...");
+        
+        // Faz a ligação para a página dashboard.html
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Por favor, preencha todos os campos.");
+    }
+});

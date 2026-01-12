@@ -1,66 +1,126 @@
 /**
- * GR DASH - LÓGICA DE INTERFACE
- * Organização: Sidebar Toggle + Navegação Ativa
+ * GR DASH - LÓGICA DE INTERFACE E GERENCIAMENTO
+ * Seções: Sidebar, Modal, Grid de Senhas e Utilidades
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. SELEÇÃO DE ELEMENTOS
+    /* ================================================================
+       SEÇÃO 1: SIDEBAR E NAVEGAÇÃO
+       ================================================================ */
     const sidebar = document.getElementById('sidebar');
     const btnAlternar = document.getElementById('btn-alternar');
     const itensMenu = document.querySelectorAll('.item-menu');
 
-    // 2. LÓGICA DA SETA (ABRIR/FECHAR SIDEBAR)
     if (btnAlternar && sidebar) {
         btnAlternar.addEventListener('click', () => {
-            // Alterna a classe que controla a largura no CSS
             sidebar.classList.toggle('aberta');
-            
-            // Opcional: Salva a preferência no navegador para não fechar ao atualizar
-            const estaAberto = sidebar.classList.contains('aberta');
-            localStorage.setItem('sidebar-aberta', estaAberto);
+            localStorage.setItem('sidebar-aberta', sidebar.classList.contains('aberta'));
         });
 
-        // Recupera o estado salvo ao carregar a página
-        const estadoSalvo = localStorage.getItem('sidebar-aberta');
-        if (estadoSalvo === 'true') {
+        if (localStorage.getItem('sidebar-aberta') === 'true') {
             sidebar.classList.add('aberta');
         }
     }
 
-    // 3. LÓGICA DE NAVEGAÇÃO (EFEITO ATIVO)
-    if (itensMenu.length > 0) {
-        itensMenu.forEach(item => {
-            item.addEventListener('click', function(e) {
-                // Remove a classe 'ativo' de todos os itens
-                itensMenu.forEach(i => i.classList.remove('ativo'));
-                
-                // Adiciona a classe 'ativo' apenas no item clicado
-                this.classList.add('ativo');
-
-                // Estudo: Se for um link real (não apenas para teste), 
-                // remova o 'e.preventDefault()' abaixo.
-                // e.preventDefault(); 
-            });
+    itensMenu.forEach(item => {
+        item.addEventListener('click', function() {
+            itensMenu.forEach(i => i.classList.remove('ativo'));
+            this.classList.add('ativo');
         });
+    });
+
+    /* ================================================================
+       SEÇÃO 2: CONTROLE DO MODAL
+       ================================================================ */
+    const modal = document.getElementById('modal-registro');
+    const btnAbrirModal = document.querySelector('.btn-adicionar');
+    const btnFecharX = document.getElementById('btn-fechar');
+    const btnCancelar = document.getElementById('btn-cancelar');
+    const formRegistro = document.getElementById('form-novo-registro');
+
+    if (btnAbrirModal) {
+        btnAbrirModal.addEventListener('click', () => modal.classList.add('modal-visivel'));
     }
-});
 
-/**
- * SEÇÃO: INTERAÇÕES DOS CARDS
- */
+    const fecharModal = () => {
+        modal.classList.remove('modal-visivel');
+        formRegistro.reset();
+    };
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Simulação de Copiar Senha
-    const botoesCopiar = document.querySelectorAll('.btn-copiar');
+    [btnFecharX, btnCancelar].forEach(btn => {
+        if (btn) btn.addEventListener('click', fecharModal);
+    });
 
-    botoesCopiar.forEach(botao => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) fecharModal();
+    });
+
+    /* ================================================================
+       SEÇÃO 3: PROCESSAMENTO DO FORMULÁRIO E GRID
+       ================================================================ */
+    const gridPrincipal = document.getElementById('grid-principal');
+
+    formRegistro.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const servico = document.getElementById('reg-servico').value;
+        const login = document.getElementById('reg-login').value;
+        const icone = document.getElementById('reg-icone').value;
+
+        // Criar o card
+        criarCardHTML(servico, login, icone);
+
+        fecharModal();
+    });
+
+    /**
+     * Descrição: Cria a estrutura do card e insere no grid.
+     * Ajuste: Adicionado tratamento para garantir que o ícone apareça.
+     */
+    function criarCardHTML(servico, login, icone) {
+        if (!gridPrincipal) return;
+
+        const novoCard = document.createElement('div');
+        novoCard.classList.add('card-senha');
+
+        // Estrutura interna idêntica ao seu CSS
+        novoCard.innerHTML = `
+            <div class="card-info">
+                <div class="servico-icone">
+                    <i class="${icone}"></i>
+                </div>
+                <div class="servico-detalhes">
+                    <span class="servico-nome">${servico}</span>
+                    <span class="servico-login">${login}</span>
+                </div>
+            </div>
+            <div class="card-acoes">
+                <button class="btn-copiar" title="Copiar Senha">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <button class="btn-opcoes">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        `;
+
+        // Configura o evento do novo botão copiar
+        const btnCopiar = novoCard.querySelector('.btn-copiar');
+        configurarEventoCopiar(btnCopiar);
+
+        gridPrincipal.appendChild(novoCard);
+    }
+
+    /**
+     * Feedback visual de cópia
+     */
+    function configurarEventoCopiar(botao) {
         botao.addEventListener('click', (e) => {
-            e.stopPropagation(); // Impede que o clique abra o card
+            e.stopPropagation();
             
-            // Aqui futuramente entrará a lógica de copiar a senha real
-            alert('Senha copiada para a área de transferência!');
-            
-            // Feedback visual rápido
+            // Simulação de cópia real (opcional)
+            // navigator.clipboard.writeText("senha123"); 
+
             const iconeOriginal = botao.innerHTML;
             botao.innerHTML = '<i class="fas fa-check"></i>';
             botao.style.color = 'var(--accent-color)';
@@ -70,5 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 botao.style.color = '';
             }, 2000);
         });
-    });
+    }
+
+    // Inicializa botões existentes no HTML
+    document.querySelectorAll('.btn-copiar').forEach(btn => configurarEventoCopiar(btn));
 });

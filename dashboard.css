@@ -256,8 +256,141 @@ body, html {
     border-color: rgba(255, 77, 77, 0.2);
 }
 
+/* ---------------------------------------------------------
+   SEÇÃO: ANIMAÇÕES DE INTERFACE
+   Descrição: Efeitos visuais para novos elementos na lista.
+   --------------------------------------------------------- */
+
+@keyframes surgirCard {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-senha {
+    /* ... seus estilos anteriores ... */
+    animation: surgirCard 0.4s ease-out forwards;
+}
+
+/* Estilo para quando o grid estiver vazio (opcional) */
+.grid-vazio-msg {
+    color: var(--text-muted);
+    text-align: center;
+    grid-column: 1 / -1;
+    padding: 40px;
+}
+
 /* ================================================================
-   SEÇÃO : GRID E CARDS DE SENHA
+   SEÇÃO: MODAL DE FORMULÁRIO
+   ================================================================ */
+
+/* Fundo escurecido que cobre a tela */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: none; /* Escondido por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Caixa branca/escura do modal */
+.modal-caixa {
+    background: var(--bg-sidebar);
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 20px;
+    border: 3px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 { color: var(--text-bright); }
+
+.btn-fechar-modal {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Estilos dos inputs do formulário */
+.grupo-input {
+    margin-bottom: 15px;
+}
+
+.grupo-input label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.grupo-input input {
+    width: 95%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--text-bright);
+    outline: none;
+}
+
+.grupo-input input:focus {
+    border-color: var(--accent-color);
+}
+
+/* Rodapé com botões de ação */
+.modal-rodape {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-cancelar {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.btn-salvar {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Classe utilitária para mostrar o modal via JS */
+.modal-visivel {
+    display: flex;
+}
+
+/* ================================================================
+   SEÇÃO: CARDS DE SENHA (ESTILO E LAYOUT)
+   Descrição: Define como os registros aparecem no grid.
    ================================================================ */
 
 .grid-senhas {
@@ -277,6 +410,7 @@ body, html {
     align-items: center;
     transition: all 0.3s ease;
     cursor: pointer;
+    animation: surgirCard 0.4s ease-out forwards;
 }
 
 .card-senha:hover {
@@ -285,7 +419,6 @@ body, html {
     background: rgba(255, 255, 255, 0.02);
 }
 
-/* Informações do Serviço */
 .card-info {
     display: flex;
     align-items: center;
@@ -304,7 +437,6 @@ body, html {
     color: var(--text-bright);
 }
 
-/* Detalhes do Texto */
 .servico-detalhes {
     display: flex;
     flex-direction: column;
@@ -320,10 +452,6 @@ body, html {
     font-size: 13px;
     color: var(--text-muted);
 }
-
-/* ================================================================
-   SEÇÃO : BOTÕES DE AÇÃO DOS CARDS
-   ================================================================ */
 
 .card-acoes {
     display: flex;
@@ -345,11 +473,3 @@ body, html {
     background: var(--accent-soft);
     color: var(--accent-color);
 }
-
-.btn-opcoes:hover {
-    background: var(--bg-item-hover);
-    color: var(--text-bright);
-}
-
-/* Cores específicas de ícones (opcional) */
-.icone-netflix { color: #e50914; }
