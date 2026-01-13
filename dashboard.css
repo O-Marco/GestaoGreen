@@ -140,37 +140,239 @@ body, html {
 .btn-salvar:hover { filter: brightness(1.1); }
 
 /* ================================================================
-   5. GRID E CARDS DE SENHA
+   4. MODAL E FORMULÁRIOS (BARRA DE DIGITAÇÃO EXPANSÍVEL)
    ================================================================ */
-.grid-senhas { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 10px; }
 
-.card-senha {
-    background: var(--bg-sidebar);
+/* Estilização da área de texto estilo Gemini */
+.textarea-dinamico {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border-color);
-    padding: 20px;
-    border-radius: 16px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    color: var(--text-bright);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    resize: none; /* Remove o controle manual de redimensionamento */
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 48px;
+    max-height: 180px; /* Limite para não quebrar o modal */
+    overflow-y: auto;
+    display: block;
+}
+
+.textarea-dinamico:focus {
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Scrollbar personalizada para a barra */
+.textarea-dinamico::-webkit-scrollbar { width: 4px; }
+.textarea-dinamico::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
+/* Ajuste no container para os campos aparecerem com animação */
+.item-campo-dinamico {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    position: relative;
+    animation: surgirEntrada 0.3s ease-out;
+}
+
+@keyframes surgirEntrada {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ================================================================
+   4.1 ESTILO DO MODAL DE VISUALIZAÇÃO
+   ================================================================ */
+
+.modal-view-caixa {
+    max-width: 400px;
+    border: 1px solid var(--accent-soft);
+    animation: surgirCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.view-header-info { display: flex; flex-direction: column; gap: 4px; }
+
+.view-tag {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+}
+
+.view-corpo { margin: 20px 0; }
+.view-corpo label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.view-valor-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: 0.3s ease;
-    cursor: pointer;
-    animation: surgirCard 0.4s ease-out forwards;
+    gap: 15px;
 }
-.card-senha:hover { border-color: var(--accent-color); transform: translateY(-5px); background: rgba(255, 255, 255, 0.02); }
 
-.card-info { display: flex; align-items: center; gap: 15px; }
-.servico-icone { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.servico-detalhes { display: flex; flex-direction: column; }
-.servico-nome { font-weight: 600; font-size: 15px; }
-.servico-login { font-size: 13px; color: var(--text-muted); }
-.tag-categoria { font-size: 10px; background: var(--accent-soft); color: var(--accent-color); padding: 2px 8px; border-radius: 4px; margin-bottom: 4px; display: inline-block; font-weight: bold; }
+.view-valor-box code {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-bright);
+    font-size: 15px;
+    word-break: break-all;
+}
 
-.card-acoes { display: flex; gap: 8px; }
-.btn-copiar, .btn-deletar { background: transparent; border: none; color: var(--text-muted); width: 35px; height: 35px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-.btn-copiar:hover { background: var(--accent-soft); color: var(--accent-color); }
-.btn-deletar { opacity: 0; }
-.card-senha:hover .btn-deletar { opacity: 1; }
-.btn-deletar:hover { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
+.btn-copiar-view {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-copiar-view:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+
+/* ================================================================
+   SEÇÃO 5: GRID E CARDS DE GESTÃO (ESTILO PREMIUM)
+   ================================================================ */
+
+.grid-senhas { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 20px; 
+    padding: 10px;
+}
+
+.card-senha {
+    background: #161b22;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 170px; /* Altura fixa para manter simetria */
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+/* Efeito de Hover e Brilho */
+.card-senha:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Cabeçalho do Card */
+.card-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.servico-icone { 
+    width: 40px; height: 40px; 
+    background: rgba(255, 255, 255, 0.03); 
+    border-radius: 10px; 
+    display: flex; align-items: center; justify-content: center; 
+    color: var(--accent-color);
+    font-size: 18px;
+}
+
+.tag-categoria { 
+    font-size: 9px; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    background: var(--accent-soft); 
+    color: var(--accent-color); 
+    padding: 4px 8px; 
+    border-radius: 5px;
+}
+
+/* Corpo do Card */
+.card-info-central {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.servico-nome { 
+    font-size: 17px; 
+    font-weight: 600; 
+    color: #fff; 
+}
+
+.preview-texto {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Camada de Ações (Aparece no Hover) */
+.card-camada-acoes {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%;
+    height: 44px; /* Mais fina para melhor proporção */
+    background: var(--accent-color);
+    display: flex;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.card-senha:hover .card-camada-acoes {
+    transform: translateY(0);
+}
+
+.btn-acao-card {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-acao-card:hover { background: rgba(0, 0, 0, 0.1); }
+.btn-acao-card:first-child { border-right: 1px solid rgba(255, 255, 255, 0.15); }
+
+/* Garante que quebras de linha apareçam no Card e no Pop-up */
+.preview-texto, #view-valor {
+    white-space: pre-wrap; /* Preserva as quebras de linha e espaços */
+    word-break: break-word;
+}
 
 /* ================================================================
    6. CAMPOS DINÂMICOS E ANIMAÇÕES
@@ -192,5 +394,38 @@ body, html {
 @keyframes surgirCard {
     from { opacity: 0; transform: translateY(15px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ================================================================
+   6.1 CAMPOS DINÂMICOS (AJUSTE PARA BOTÃO DE VISIBILIDADE)
+   ================================================================ */
+
+/* Container relativo para posicionar o botão do olho */
+.campo-textarea-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Botão do olho posicionado dentro do textarea */
+.btn-toggle-senha {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.2s;
+    z-index: 5;
+}
+
+.btn-toggle-senha:hover {
+    color: var(--accent-color);
+}
+
+/* Ajuste no padding do textarea de senha para o texto não ficar sob o olho */
+.textarea-dinamico[data-tipo="senha"] {
+    padding-right: 40px;
 }
 
