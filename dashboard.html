@@ -90,13 +90,13 @@
                                 <input type="text" id="reg-servico" placeholder="Ex: Google, WiFi..." required>
                             </div>
 
-                            <div class="grupo-input">
+                            <div class="grupo-input" >
                                 <label>Categoria</label>
                                 <select id="reg-categoria-select">
                                     <option value="Trabalho">Trabalho</option>
                                     <option value="Pessoal">Pessoal</option>
                                     <option value="outra">+ Criar nova...</option>
-                                </select>
+                                </select >
                                 <input type="text" id="reg-categoria-nova" placeholder="Qual o nome?"
                                     style="display: none; margin-top: 8px;">
                             </div>
@@ -105,7 +105,7 @@
                                 <label>Senha / Chave</label>
                                 <div class="campo-senha-container">
                                     <input type="password" id="reg-senha" class="input-padrao" placeholder="••••••••"
-                                        required>
+                                        >
                                     <button type="button" class="btn-ver-senha-simples" id="toggle-senha-fixa">
                                         <i class="fas fa-eye"></i>
                                     </button>
@@ -113,10 +113,20 @@
                             </div>
                         </div>
 
-                        <div class="coluna-direita">
-                            <div class="grupo-input full-height">
-                                <label>Notas e Detalhes</label>
-                                <textarea id="reg-notas" placeholder="Observações, pins ou links..."></textarea>
+                        <div class="grupo-input">
+                            <label>Notas e Detalhes</label>
+                            <div class="editor-wrapper">
+                                <div class="toolbar-editor" id="toolbar-notas-fixa">
+                                    <button type="button" class="btn-tool" data-char="• " title="Lista"><i
+                                            class="fas fa-list-ul"></i></button>
+                                    <button type="button" class="btn-tool" data-char="--------------------------"
+                                        title="Linha"><i class="fas fa-minus"></i></button>
+                                    <button type="button" class="btn-tool" data-char="📌 " title="Pin">📌</button>
+                                    <button type="button" class="btn-tool" data-char="✅ " title="Check">✅</button>
+                                    <button type="button" class="btn-tool" data-char="⚠️ " title="Aviso">⚠️</button>
+                                </div>
+                                <textarea id="reg-notas"
+                                    placeholder="Escreva observações ou use a barra de ferramentas..."></textarea>
                             </div>
                         </div>
                     </div>

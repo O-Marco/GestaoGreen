@@ -1,6 +1,11 @@
 /**
  * GR DASH - LÓGICA DE INTERFACE E GERENCIAMENTO
- * Seções: 1. Sidebar, 2. Modal Controle, 3. Formulário Fixo, 4. Renderização Grid
+ * Seções: 
+ * 1. Sidebar e Navegação
+ * 2. Controle do Modal
+ * 3. Formulário (Senha, Editor de Notas e Envio)
+ * 4. Grid de Registros (Cards)
+ * 5. Visualização de Detalhes (View)
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -64,21 +69,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================================================
-       3. LÓGICA DO FORMULÁRIO (SENHA E NOTAS)
+       3. LÓGICA DO FORMULÁRIO (SENHA, EDITOR DE NOTAS E ENVIO)
        ================================================================ */
     const btnToggleSenha = document.getElementById('toggle-senha-fixa');
     const inputSenhaFixa = document.getElementById('reg-senha');
+    const textareaNotas = document.getElementById('reg-notas');
+    const toolbarNotas = document.getElementById('toolbar-notas-fixa');
 
-    // Alternar visibilidade da senha
+    // 3.1 Alternar visibilidade da senha
     if (btnToggleSenha && inputSenhaFixa) {
-        btnToggleSenha.addEventListener('click', () => {
+        btnToggleSenha.addEventListener('click', (e) => {
+            e.preventDefault();
             const isPassword = inputSenhaFixa.type === 'password';
             inputSenhaFixa.type = isPassword ? 'text' : 'password';
             btnToggleSenha.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
         });
     }
 
-    // Processar envio do formulário
+    // 3.2 Lógica do Editor de Notas (Botões da Toolbar)
+    if (toolbarNotas && textareaNotas) {
+        toolbarNotas.querySelectorAll('.btn-tool').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); // Não deixa o formulário enviar ao clicar no emoji
+                
+                const char = btn.getAttribute('data-char');
+                const start = textareaNotas.selectionStart;
+                const end = textareaNotas.selectionEnd;
+                const textoOriginal = textareaNotas.value;
+
+                textareaNotas.value = textoOriginal.substring(0, start) + char + textoOriginal.substring(end);
+
+                textareaNotas.focus();
+                textareaNotas.selectionStart = textareaNotas.selectionEnd = start + char.length;
+            });
+        });
+    }
+
+    // 3.3 Processar envio do formulário
     if (formRegistro) {
         formRegistro.addEventListener("submit", (e) => {
             e.preventDefault();
@@ -86,12 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const servico = document.getElementById("reg-servico").value;
             const categoria = selectCat.value === "outra" ? inputNovaCat.value : selectCat.value;
             const senha = inputSenhaFixa.value;
-            const notas = document.getElementById("reg-notas").value;
+            const notas = textareaNotas.value;
 
-            // 1. Cria o card da Senha
+            // Cria o card da Senha
             criarCardHTML(servico, categoria, senha, "senha");
             
-            // 2. Cria o card de Notas (opcional, se houver texto)
+            // Cria o card de Notas (se houver texto)
             if (notas.trim() !== "") {
                 criarCardHTML(servico, categoria, notas, "nome");
             }
@@ -101,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================================================
-       4. RENDERIZAÇÃO E AÇÕES DO GRID
+       4. RENDERIZAÇÃO E AÇÕES DO GRID (CARDS)
        ================================================================ */
     const gridPrincipal = document.getElementById("grid-principal");
 
@@ -109,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const novoCard = document.createElement("div");
         novoCard.className = "card-senha";
 
-        // Define ícone baseado no tipo ou tamanho do texto
         let icone = tipo === "senha" ? "fas fa-shield-halved" : "fas fa-file-lines";
 
         novoCard.innerHTML = `
@@ -127,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-        // Evento de Visualizar Detalhes
+        // Evento de Visualizar Detalhes (ao clicar no card)
         novoCard.addEventListener("click", (e) => {
             if (!e.target.closest(".card-camada-acoes")) {
                 exibirModalView(servico, categoria, valor);
@@ -170,7 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("view-valor").innerText = valor;
 
         const btnCopiarModal = document.getElementById("btn-copiar-modal");
-        btnCopiarModal.onclick = () => {
+        btnCopiarModal.onclick = (e) => {
+            e.preventDefault();
             navigator.clipboard.writeText(valor);
             const icon = btnCopiarModal.querySelector("i");
             icon.className = "fas fa-check";
@@ -184,8 +211,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalView = document.getElementById("modal-view");
     if (modalView) {
         const fecharV = () => modalView.classList.remove("modal-visivel");
+        
         document.getElementById("btn-fechar-view")?.addEventListener("click", fecharV);
         document.getElementById("btn-fechar-view-footer")?.addEventListener("click", fecharV);
-        modalView.addEventListener("click", (e) => { if (e.target === modalView) fecharV(); });
+        
+        modalView.addEventListener("click", (e) => { 
+            if (e.target === modalView) fecharV(); 
+        });
     }
 });
