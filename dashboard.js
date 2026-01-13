@@ -62,10 +62,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ================================================================
-       SEÇÃO 3: GERENCIAMENTO DE CAMPOS DINÂMICOS (COM OLHO NA SENHA)
+       SEÇÃO 3: GERENCIAMENTO DE CAMPOS DINÂMICOS (EDITOR DE NOTAS)
        ================================================================ */
     const btnAddNome = document.getElementById('add-campo-nome');
     const btnAddSenha = document.getElementById('add-campo-senha');
+
+    // Função auxiliar para inserir caracteres no cursor
+    const inserirNoTexto = (textarea, prefixo, sufixo = "") => {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const texto = textarea.value;
+        textarea.value = texto.substring(0, start) + prefixo + texto.substring(start, end) + sufixo + texto.substring(end);
+        textarea.focus();
+        textarea.dispatchEvent(new Event('input')); // Dispara o redimensionamento
+    };
 
     const adicionarNovaCaixa = (tipo) => {
         const divId = "campo-" + Date.now();
@@ -74,8 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
         novoCampo.id = divId;
 
         const label = tipo === "senha" ? "Senha / Chave Secreta" : "Nome / Nota de Texto";
-        const placeholder = tipo === "senha" ? "••••••••" : "Escreva aqui...";
+        const placeholder = tipo === "senha" ? "••••••••" : "Escreva algo organizado...";
 
+        // HTML com Toolbar para Nome/Notas
         novoCampo.innerHTML = `
             <label style="font-size: 11px; color: var(--accent-color); font-weight: 700; margin-bottom: 8px; display: block;">
                 ${label}
@@ -83,6 +94,17 @@ document.addEventListener("DOMContentLoaded", () => {
             <button type="button" class="btn-remover-campo" onclick="removerCaixa('${divId}')">
                 <i class="fas fa-times"></i>
             </button>
+            
+            ${tipo === 'nome' ? `
+                <div class="toolbar-editor" style="display: flex; gap: 8px; margin-bottom: 5px; background: rgba(255,255,255,0.03); padding: 5px; border-radius: 6px;">
+                    <button type="button" class="btn-tool" data-char="• " title="Lista"><i class="fas fa-list-ul"></i></button>
+                    <button type="button" class="btn-tool" data-char="--------------------------\n" title="Linha"><i class="fas fa-minus"></i></button>
+                    <button type="button" class="btn-tool" data-char="📌 " title="Pin">📌</button>
+                    <button type="button" class="btn-tool" data-char="✅ " title="Check">✅</button>
+                    <button type="button" class="btn-tool" data-char="⚠️ " title="Aviso">⚠️</button>
+                </div>
+            ` : ''}
+
             <div class="campo-senha-container" style="position: relative;">
                 <textarea 
                     class="textarea-dinamico input-valor-dinamico" 
@@ -101,16 +123,22 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         containerCampos.appendChild(novoCampo);
-
         const textarea = novoCampo.querySelector("textarea");
         
+        // Ativar botões da Toolbar
+        if (tipo === 'nome') {
+            novoCampo.querySelectorAll('.btn-tool').forEach(btn => {
+                btn.addEventListener('click', () => inserirNoTexto(textarea, btn.dataset.char));
+            });
+        }
+
         // Auto-expansão
         textarea.addEventListener("input", function () {
             this.style.height = "auto";
             this.style.height = this.scrollHeight + "px";
         });
 
-        // Lógica do Olho (Mostrar/Esconder)
+        // Lógica do Olho
         if (tipo === 'senha') {
             const btnOlho = novoCampo.querySelector(".btn-ver-senha");
             btnOlho.addEventListener("click", () => {

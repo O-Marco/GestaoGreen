@@ -108,7 +108,26 @@ body, html {
 /* Overlay e Caixa */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
 .modal-visivel { display: flex; }
-.modal-caixa { background: var(--bg-sidebar); width: 100%; max-width: 450px; padding: 30px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.modal-caixa {
+    background: var(--bg-sidebar);
+    width: 95%; /* Ocupa quase tudo em telas pequenas */
+    max-width: 600px; /* Aumentado de 450px para 600px */
+    padding: 35px; /* Mais respiro interno */
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+/* Aumentando a área visível dos campos dinâmicos */
+.lista-campos-dinamicos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+    max-height: 400px; /* Aumentado de 250px para 400px para mostrar mais campos */
+    overflow-y: auto;
+    padding-right: 10px;
+}
 
 /* Cabeçalho e Botão Fechar */
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -140,7 +159,7 @@ body, html {
 .btn-salvar:hover { filter: brightness(1.1); }
 
 /* ================================================================
-   4. MODAL E FORMULÁRIOS (BARRA DE DIGITAÇÃO EXPANSÍVEL)
+   4.1 MODAL E FORMULÁRIOS (BARRA DE DIGITAÇÃO EXPANSÍVEL)
    ================================================================ */
 
 /* Estilização da área de texto estilo Gemini */
@@ -155,12 +174,23 @@ body, html {
     transition: border-color 0.2s, background 0.2s;
     resize: none; /* Remove o controle manual de redimensionamento */
     font-family: inherit;
-    font-size: 14px;
     line-height: 1.5;
-    min-height: 48px;
-    max-height: 180px; /* Limite para não quebrar o modal */
     overflow-y: auto;
     display: block;
+    font-size: 14px; /* Texto levemente maior para leitura */
+    min-height: 60px; /* Começa um pouco mais alto */
+    max-height: 250px; /* Permite expandir mais antes de surgir scroll */
+}
+
+/* Melhorando a visualização da Toolbar */
+.toolbar-nota {
+    padding: 8px 12px;
+    gap: 12px;
+}
+
+.btn-tool {
+    font-size: 15px; /* Ícones da toolbar maiores */
+    padding: 6px;
 }
 
 .textarea-dinamico:focus {
@@ -191,7 +221,7 @@ body, html {
 
 
 /* ================================================================
-   4.1 ESTILO DO MODAL DE VISUALIZAÇÃO
+   4.2 ESTILO DO MODAL DE VISUALIZAÇÃO
    ================================================================ */
 
 .modal-view-caixa {
@@ -429,3 +459,42 @@ body, html {
     padding-right: 40px;
 }
 
+/* ================================================================
+   7. TOOLBAR DE EDIÇÃO (NOTAS DE TEXTO)
+   ================================================================ */
+
+.toolbar-nota {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    padding: 6px 10px;
+    border-radius: 8px 8px 0 0;
+    margin-top: 5px;
+}
+
+.btn-tool {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-tool:hover {
+    background: var(--accent-soft);
+    color: var(--accent-color);
+}
+
+/* Ajuste para o textarea conectar com a toolbar */
+.textarea-com-toolbar {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
