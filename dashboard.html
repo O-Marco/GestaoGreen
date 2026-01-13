@@ -83,33 +83,42 @@
                 </div>
 
                 <form class="modal-form" id="form-novo-registro">
-                    <div class="grupo-input">
-                        <label>Nome do Serviço</label>
-                        <input type="text" id="reg-servico" placeholder="Ex: Google, WiFi Casa..." required>
-                    </div>
+                    <div class="modal-grid-layout">
+                        <div class="coluna-esquerda">
+                            <div class="grupo-input">
+                                <label>Nome do Serviço</label>
+                                <input type="text" id="reg-servico" placeholder="Ex: Google, WiFi..." required>
+                            </div>
 
-                    <div class="grupo-input">
-                        <label>Categoria</label>
-                        <div class="input-duplo">
-                            <select id="reg-categoria-select">
-                                <option value="Trabalho">Trabalho</option>
-                                <option value="Pessoal">Pessoal</option>
-                                <option value="outra">+ Criar nova...</option>
-                            </select>
-                            <input type="text" id="reg-categoria-nova" placeholder="Qual o nome?"
-                                style="display: none; margin-top: 8px;">
+                            <div class="grupo-input">
+                                <label>Categoria</label>
+                                <select id="reg-categoria-select">
+                                    <option value="Trabalho">Trabalho</option>
+                                    <option value="Pessoal">Pessoal</option>
+                                    <option value="outra">+ Criar nova...</option>
+                                </select>
+                                <input type="text" id="reg-categoria-nova" placeholder="Qual o nome?"
+                                    style="display: none; margin-top: 8px;">
+                            </div>
+
+                            <div class="grupo-input">
+                                <label>Senha / Chave</label>
+                                <div class="campo-senha-container">
+                                    <input type="password" id="reg-senha" class="input-padrao" placeholder="••••••••"
+                                        required>
+                                    <button type="button" class="btn-ver-senha-simples" id="toggle-senha-fixa">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="grupo-input">
-                        <label>O que deseja salvar?</label>
-                        <div class="seletor-tipo-dado">
-                            <button type="button" class="btn-tipo" id="add-campo-nome">+ Nome</button>
-                            <button type="button" class="btn-tipo" id="add-campo-senha">+ Senha</button>
+                        <div class="coluna-direita">
+                            <div class="grupo-input full-height">
+                                <label>Notas e Detalhes</label>
+                                <textarea id="reg-notas" placeholder="Observações, pins ou links..."></textarea>
+                            </div>
                         </div>
-                    </div>
-
-                    <div id="lista-campos-dinamicos" class="lista-campos-dinamicos">
                     </div>
 
                     <div class="modal-rodape">

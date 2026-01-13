@@ -27,7 +27,7 @@ body, html {
 }
 
 /* ================================================================
-   2. ESTRUTURA DA SIDEBAR
+   2. ESTRUTURA DA SIDEBAR (NAVEGAÇÃO)
    ================================================================ */
 .barra-lateral {
     position: fixed; left: 0; top: 0; height: 100vh;
@@ -42,14 +42,14 @@ body, html {
 
 .barra-lateral.aberta { width: var(--sb-width-expanded); }
 
-/* Cabeçalho e Logo */
+/* Logo */
 .cabecalho-sidebar { display: flex; align-items: center; height: 50px; margin-bottom: 30px; }
 .logo-container { display: flex; align-items: center; min-width: 180px; }
 .logo-icone { background: var(--accent-color); color: #fff; min-width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-weight: 700; }
 .logo-texto { font-size: 20px; font-weight: 600; margin-left: 15px; opacity: 0; transition: 0.2s; }
 .barra-lateral.aberta .logo-texto { opacity: 1; }
 
-/* Menu de Navegação */
+/* Itens do Menu */
 .menu-navegacao { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .item-menu { display: flex; align-items: center; padding: 12px; color: var(--text-muted); text-decoration: none; border-radius: 8px; transition: 0.2s; white-space: nowrap; }
 .item-menu i { font-size: 18px; min-width: 30px; text-align: center; }
@@ -58,7 +58,7 @@ body, html {
 .item-menu:hover { background: var(--bg-item-hover); color: var(--text-bright); }
 .item-menu.ativo { background: var(--accent-soft); color: var(--accent-color); }
 
-/* Rodapé e Toggle */
+/* Rodapé Sidebar e Toggle */
 .rodape-sidebar { border-top: 1px solid var(--border-color); padding-top: 15px; display: flex; flex-direction: column; align-items: center; }
 .btn-toggle-seta { background: var(--bg-item-hover); border: 1px solid var(--border-color); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; transition: all 0.5s ease; }
 .btn-toggle-seta:hover { background: var(--accent-color); color: #fff; }
@@ -102,128 +102,89 @@ body, html {
 .btn-logout:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.2); }
 
 /* ================================================================
-   4. MODAL E FORMULÁRIOS (CORES DE SELEÇÃO)
+   4. MODAL DE REGISTRO (FORMULÁRIO FIXO EM COLUNAS)
    ================================================================ */
-
-/* Overlay e Caixa */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
 .modal-visivel { display: flex; }
+
 .modal-caixa {
     background: var(--bg-sidebar);
-    width: 95%; /* Ocupa quase tudo em telas pequenas */
-    max-width: 600px; /* Aumentado de 450px para 600px */
-    padding: 35px; /* Mais respiro interno */
+    width: 95%;
+    max-width: 750px;
+    padding: 35px;
     border-radius: 24px;
     border: 1px solid var(--border-color);
     box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 
-/* Aumentando a área visível dos campos dinâmicos */
-.lista-campos-dinamicos {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 15px;
-    max-height: 400px; /* Aumentado de 250px para 400px para mostrar mais campos */
-    overflow-y: auto;
-    padding-right: 10px;
+.modal-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 30px;
+    margin-top: 10px;
 }
 
-/* Cabeçalho e Botão Fechar */
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.btn-fechar-modal { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; transition: color 0.2s ease; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.modal-header h3 { margin: 0; font-size: 22px; }
+.btn-fechar-modal { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; transition: color 0.2s; }
 .btn-fechar-modal:hover { color: #ff4d4d; }
 
-/* Inputs e Selects */
-.grupo-input { margin-bottom: 15px; }
-.grupo-input label { display: block; color: var(--text-muted); font-size: 13px; margin-bottom: 8px; }
-.grupo-input input, .grupo-input select { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; color: var(--text-bright); outline: none; transition: 0.3s var(--anim-curve); }
-.grupo-input select option { background-color: var(--bg-sidebar); color: var(--text-bright); }
-.grupo-input input:focus, .grupo-input select:focus { border-color: var(--accent-color); background: rgba(255, 255, 255, 0.08); }
+/* Estilo dos Grupos de Input */
+.grupo-input { margin-bottom: 20px; }
+.grupo-input label { display: block; color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
 
-/* Botões +Nome e +Senha (Efeito Verde) */
-.seletor-tipo-dado { display: flex; gap: 10px; margin-bottom: 15px; }
-.btn-tipo { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.05); color: var(--text-muted); cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
-
-/* Efeito ao passar o mouse */
-.btn-tipo:hover { background: rgba(46, 160, 67, 0.1); border-color: var(--accent-color); color: var(--text-bright); }
-
-/* Efeito Verde ao Clicar (Active) ou quando Ativo */
-.btn-tipo:active, .btn-tipo.ativo { background: var(--accent-soft) !important; border-color: var(--accent-color) !important; color: var(--accent-color) !important; box-shadow: 0 0 10px rgba(46, 160, 67, 0.2); }
-
-/* Rodapé e Ações */
-.modal-rodape { display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px; }
-.btn-cancelar { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 10px 15px; border-radius: 8px; transition: all 0.2s ease; }
-.btn-cancelar:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); }
-.btn-salvar { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: filter 0.2s; }
-.btn-salvar:hover { filter: brightness(1.1); }
-
-/* ================================================================
-   4.1 MODAL E FORMULÁRIOS (BARRA DE DIGITAÇÃO EXPANSÍVEL)
-   ================================================================ */
-
-/* Estilização da área de texto estilo Gemini */
-.textarea-dinamico {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    padding: 12px 15px;
-    border-radius: 12px;
-    color: var(--text-bright);
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    resize: none; /* Remove o controle manual de redimensionamento */
+.grupo-input input, .grupo-input select, .grupo-input textarea { 
+    width: 100%; 
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid var(--border-color); 
+    padding: 12px; 
+    border-radius: 10px; 
+    color: var(--text-bright); 
+    outline: none; 
     font-family: inherit;
-    line-height: 1.5;
-    overflow-y: auto;
-    display: block;
-    font-size: 14px; /* Texto levemente maior para leitura */
-    min-height: 60px; /* Começa um pouco mais alto */
-    max-height: 250px; /* Permite expandir mais antes de surgir scroll */
+    transition: 0.3s; 
 }
 
-/* Melhorando a visualização da Toolbar */
-.toolbar-nota {
-    padding: 8px 12px;
-    gap: 12px;
+.grupo-input input:focus, .grupo-input select:focus, .grupo-input textarea:focus { 
+    border-color: var(--accent-color); 
+    background: rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-.btn-tool {
-    font-size: 15px; /* Ícones da toolbar maiores */
-    padding: 6px;
+/* Coluna de Notas */
+.coluna-direita { display: flex; flex-direction: column; }
+.coluna-direita .full-height { flex: 1; display: flex; flex-direction: column; margin-bottom: 0; }
+.coluna-direita textarea { 
+    flex: 1; 
+    min-height: 200px; 
+    resize: none; 
+    line-height: 1.6;
 }
 
-.textarea-dinamico:focus {
-    border-color: var(--accent-color);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 2px var(--accent-soft);
+/* Senha e Olho */
+.campo-senha-container { position: relative; display: flex; align-items: center; }
+.btn-ver-senha-simples { 
+    position: absolute; 
+    right: 12px; 
+    background: none; 
+    border: none; 
+    color: var(--text-muted); 
+    cursor: pointer; 
+    font-size: 16px;
+    padding: 5px;
 }
+.btn-ver-senha-simples:hover { color: var(--text-bright); }
 
-/* Scrollbar personalizada para a barra */
-.textarea-dinamico::-webkit-scrollbar { width: 4px; }
-.textarea-dinamico::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-
-/* Ajuste no container para os campos aparecerem com animação */
-.item-campo-dinamico {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    border-radius: 14px;
-    margin-bottom: 12px;
-    position: relative;
-    animation: surgirEntrada 0.3s ease-out;
-}
-
-@keyframes surgirEntrada {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+/* Rodapé do Modal */
+.modal-rodape { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+.btn-cancelar { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; padding: 10px 20px; }
+.btn-cancelar:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1);border-radius: 10px }
+.btn-salvar { background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.btn-salvar:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
 /* ================================================================
-   4.2 ESTILO DO MODAL DE VISUALIZAÇÃO
+   4.2 MODAL DE VISUALIZAÇÃO (VIEW)
    ================================================================ */
-
 .modal-view-caixa {
     max-width: 400px;
     border: 1px solid var(--accent-soft);
@@ -231,22 +192,9 @@ body, html {
 }
 
 .view-header-info { display: flex; flex-direction: column; gap: 4px; }
-
-.view-tag {
-    font-size: 10px;
-    font-weight: 800;
-    color: var(--accent-color);
-    letter-spacing: 1px;
-}
-
+.view-tag { font-size: 10px; font-weight: 800; color: var(--accent-color); letter-spacing: 1px; }
 .view-corpo { margin: 20px 0; }
-.view-corpo label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 700;
-    margin-bottom: 10px;
-    display: block;
-}
+.view-corpo label { font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; display: block; }
 
 .view-valor-box {
     background: rgba(0, 0, 0, 0.3);
@@ -259,35 +207,23 @@ body, html {
     gap: 15px;
 }
 
-.view-valor-box code {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--text-bright);
-    font-size: 15px;
-    word-break: break-all;
-}
+.view-valor-box code { font-family: 'JetBrains Mono', monospace; color: var(--text-bright); font-size: 15px; word-break: break-all; }
 
 .btn-copiar-view {
     background: var(--accent-soft);
     border: 1px solid var(--accent-color);
     color: var(--accent-color);
-    width: 38px;
-    height: 38px;
+    width: 38px; height: 38px;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
     flex-shrink: 0;
 }
-
-.btn-copiar-view:hover {
-    background: var(--accent-color);
-    color: white;
-}
-
+.btn-copiar-view:hover { background: var(--accent-color); color: white; }
 
 /* ================================================================
-   SEÇÃO 5: GRID E CARDS DE GESTÃO (ESTILO PREMIUM)
+   5. GRID E CARDS DE REGISTRO
    ================================================================ */
-
 .grid-senhas { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
@@ -302,84 +238,47 @@ body, html {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: 170px; /* Altura fixa para manter simetria */
+    height: 170px;
     position: relative;
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     overflow: hidden;
 }
 
-/* Efeito de Hover e Brilho */
 .card-senha:hover {
     transform: translateY(-5px);
     border-color: var(--accent-color);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-/* Cabeçalho do Card */
-.card-topo {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
-}
+.card-topo { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.servico-icone { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.03); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 18px; }
+.tag-categoria { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; background: var(--accent-soft); color: var(--accent-color); padding: 4px 8px; border-radius: 5px; }
 
-.servico-icone { 
-    width: 40px; height: 40px; 
-    background: rgba(255, 255, 255, 0.03); 
-    border-radius: 10px; 
-    display: flex; align-items: center; justify-content: center; 
-    color: var(--accent-color);
-    font-size: 18px;
-}
-
-.tag-categoria { 
-    font-size: 9px; 
-    font-weight: 800; 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px;
-    background: var(--accent-soft); 
-    color: var(--accent-color); 
-    padding: 4px 8px; 
-    border-radius: 5px;
-}
-
-/* Corpo do Card */
-.card-info-central {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.servico-nome { 
-    font-size: 17px; 
-    font-weight: 600; 
-    color: #fff; 
-}
+.card-info-central { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.servico-nome { font-size: 17px; font-weight: 600; color: #fff; }
 
 .preview-texto {
     font-size: 12px;
     color: var(--text-muted);
     font-family: 'JetBrains Mono', monospace;
-    white-space: nowrap;
+    white-space: pre-wrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break: break-word;
 }
 
-/* Camada de Ações (Aparece no Hover) */
+/* Camada de Ações (Hover no Card) */
 .card-camada-acoes {
     position: absolute;
     bottom: 0; left: 0; width: 100%;
-    height: 44px; /* Mais fina para melhor proporção */
+    height: 44px;
     background: var(--accent-color);
     display: flex;
     transform: translateY(100%);
     transition: transform 0.3s ease;
 }
 
-.card-senha:hover .card-camada-acoes {
-    transform: translateY(0);
-}
+.card-senha:hover .card-camada-acoes { transform: translateY(0); }
 
 .btn-acao-card {
     flex: 1;
@@ -398,103 +297,21 @@ body, html {
 .btn-acao-card:hover { background: rgba(0, 0, 0, 0.1); }
 .btn-acao-card:first-child { border-right: 1px solid rgba(255, 255, 255, 0.15); }
 
-/* Garante que quebras de linha apareçam no Card e no Pop-up */
-.preview-texto, #view-valor {
-    white-space: pre-wrap; /* Preserva as quebras de linha e espaços */
-    word-break: break-word;
+/* ================================================================
+   6. RESPONSIVIDADE E ANIMAÇÕES
+   ================================================================ */
+@media (max-width: 700px) {
+    .modal-grid-layout { grid-template-columns: 1fr; gap: 15px; }
+    .coluna-direita textarea { min-height: 120px; }
 }
 
-/* ================================================================
-   6. CAMPOS DINÂMICOS E ANIMAÇÕES
-   ================================================================ */
-.lista-campos-dinamicos { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; max-height: 250px; overflow-y: auto; padding-right: 8px; }
-.lista-campos-dinamicos::-webkit-scrollbar { width: 5px; }
-.lista-campos-dinamicos::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-
-.item-campo-dinamico { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; position: relative; animation: surgirCard 0.3s ease; }
-.item-campo-dinamico label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent-color); margin-bottom: 5px; display: block; }
-.item-campo-dinamico input { width: 100% !important; background: transparent !important; border: none !important; color: var(--text-bright) !important; outline: none !important; padding: 5px 0 !important; }
-
-.campo-senha-container { position: relative; width: 100%; display: flex; align-items: center; }
-.btn-input-acao { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
-.btn-input-acao:hover { color: var(--text-bright); }
-.btn-remover-campo { position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; }
-.btn-remover-campo:hover { color: #ff4d4d; }
-
 @keyframes surgirCard {
-    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    from { opacity: 0; transform: translateY(10px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ================================================================
-   6.1 CAMPOS DINÂMICOS (AJUSTE PARA BOTÃO DE VISIBILIDADE)
-   ================================================================ */
-
-/* Container relativo para posicionar o botão do olho */
-.campo-textarea-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-/* Botão do olho posicionado dentro do textarea */
-.btn-toggle-senha {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 14px;
-    transition: color 0.2s;
-    z-index: 5;
-}
-
-.btn-toggle-senha:hover {
-    color: var(--accent-color);
-}
-
-/* Ajuste no padding do textarea de senha para o texto não ficar sob o olho */
-.textarea-dinamico[data-tipo="senha"] {
-    padding-right: 40px;
-}
-
-/* ================================================================
-   7. TOOLBAR DE EDIÇÃO (NOTAS DE TEXTO)
-   ================================================================ */
-
-.toolbar-nota {
-    display: flex;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-color);
-    border-bottom: none;
-    padding: 6px 10px;
-    border-radius: 8px 8px 0 0;
-    margin-top: 5px;
-}
-
-.btn-tool {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 13px;
-    padding: 4px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-tool:hover {
-    background: var(--accent-soft);
-    color: var(--accent-color);
-}
-
-/* Ajuste para o textarea conectar com a toolbar */
-.textarea-com-toolbar {
-    border-top-left-radius: 0 !important;
-    border-top-right-radius: 0 !important;
+/* Preserva quebras de linha no popup de visualização */
+#view-valor {
+    white-space: pre-wrap;
+    word-break: break-word;
 }
