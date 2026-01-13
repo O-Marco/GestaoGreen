@@ -256,84 +256,10 @@ body, html {
 }
 .btn-copiar-view:hover { background: var(--accent-color); color: white; }
 
-/* ================================================================
-   5. GRID E CARDS DE REGISTRO
-   ================================================================ */
-.grid-senhas { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 20px; 
-    padding: 10px;
-}
 
-.card-senha {
-    background: #161b22;
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 170px;
-    position: relative;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden;
-}
-
-.card-senha:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-color);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-}
-
-.card-topo { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.servico-icone { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.03); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 18px; }
-.tag-categoria { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; background: var(--accent-soft); color: var(--accent-color); padding: 4px 8px; border-radius: 5px; }
-
-.card-info-central { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.servico-nome { font-size: 17px; font-weight: 600; color: #fff; }
-
-.preview-texto {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: 'JetBrains Mono', monospace;
-    white-space: pre-wrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
-}
-
-/* Camada de Ações (Hover no Card) */
-.card-camada-acoes {
-    position: absolute;
-    bottom: 0; left: 0; width: 100%;
-    height: 44px;
-    background: var(--accent-color);
-    display: flex;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-}
-
-.card-senha:hover .card-camada-acoes { transform: translateY(0); }
-
-.btn-acao-card {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-.btn-acao-card:hover { background: rgba(0, 0, 0, 0.1); }
-.btn-acao-card:first-child { border-right: 1px solid rgba(255, 255, 255, 0.15); }
 
 /* ================================================================
-   6. RESPONSIVIDADE E ANIMAÇÕES
+   5. RESPONSIVIDADE E ANIMAÇÕES
    ================================================================ */
 @media (max-width: 700px) {
     .modal-grid-layout { grid-template-columns: 1fr; gap: 15px; }
@@ -352,7 +278,7 @@ body, html {
 }
 
 /* ================================================================
-   7. ESTILO DO EDITOR DE NOTAS (UNIFICADO)
+   6. ESTILO DO EDITOR DE NOTAS (UNIFICADO)
    ================================================================ */
 
 .editor-wrapper {
@@ -419,7 +345,7 @@ select option {
 }
 
 /* ================================================================
-   7.1 CUSTOMIZAÇÃO DA ALÇA DE REDIMENSIONAMENTO (RESIZE)
+   6.1 CUSTOMIZAÇÃO DA ALÇA DE REDIMENSIONAMENTO (RESIZE)
    ================================================================ */
 
 /* Torna a área de puxar mais visível */
@@ -463,7 +389,7 @@ select option {
 }
 
 /* ================================================================
-   7.2 FEEDBACK VISUAL AO PASSAR O MOUSE
+   6.2 FEEDBACK VISUAL AO PASSAR O MOUSE
    ================================================================ */
 
 #reg-notas {

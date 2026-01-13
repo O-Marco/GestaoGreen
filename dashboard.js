@@ -3,8 +3,8 @@
  * Seções: 
  * 1. Sidebar e Navegação
  * 2. Controle do Modal
- * 3. Formulário (Senha, Editor de Notas e Envio)
- * 4. Grid de Registros (Cards)
+ * 3. Formulário (Senha, Editor de Notas e Envio Unificado)
+ * 4. Grid de Registros (Cards Unificados)
  * 5. Visualização de Detalhes (View)
  */
 
@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btn) btn.addEventListener("click", fecharModal);
     });
 
-    // Lógica de "Nova Categoria"
     if (selectCat) {
         selectCat.addEventListener("change", () => {
             inputNovaCat.style.display = selectCat.value === "outra" ? "block" : "none";
@@ -69,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ================================================================
-       3. LÓGICA DO FORMULÁRIO (SENHA, EDITOR DE NOTAS E ENVIO)
+       3. LÓGICA DO FORMULÁRIO (SENHA, NOTAS E ENVIO UNIFICADO)
        ================================================================ */
     const btnToggleSenha = document.getElementById('toggle-senha-fixa');
     const inputSenhaFixa = document.getElementById('reg-senha');
@@ -86,57 +85,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3.2 Lógica do Editor de Notas (Botões da Toolbar)
+    // 3.2 Editor de Notas (Emoji/Linhas)
     if (toolbarNotas && textareaNotas) {
         toolbarNotas.querySelectorAll('.btn-tool').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.preventDefault(); // Não deixa o formulário enviar ao clicar no emoji
-                
+                e.preventDefault();
                 const char = btn.getAttribute('data-char');
                 const start = textareaNotas.selectionStart;
                 const end = textareaNotas.selectionEnd;
                 const textoOriginal = textareaNotas.value;
 
                 textareaNotas.value = textoOriginal.substring(0, start) + char + textoOriginal.substring(end);
-
                 textareaNotas.focus();
                 textareaNotas.selectionStart = textareaNotas.selectionEnd = start + char.length;
             });
         });
     }
 
-    // 3.3 Processar envio do formulário
+    // 3.3 SUBMIT: Agora cria APENAS UM card com todas as informações
     if (formRegistro) {
         formRegistro.addEventListener("submit", (e) => {
             e.preventDefault();
             
             const servico = document.getElementById("reg-servico").value;
             const categoria = selectCat.value === "outra" ? inputNovaCat.value : selectCat.value;
-            const senha = inputSenhaFixa.value;
+            const senha = inputSenhaFixa.value; // Não é mais obrigatória
             const notas = textareaNotas.value;
 
-            // Cria o card da Senha
-            criarCardHTML(servico, categoria, senha, "senha");
-            
-            // Cria o card de Notas (se houver texto)
-            if (notas.trim() !== "") {
-                criarCardHTML(servico, categoria, notas, "nome");
-            }
+            // Envia tudo para uma única função de criação
+            criarCardHTML(servico, categoria, senha, notas);
 
             fecharModal();
         });
     }
 
     /* ================================================================
-       4. RENDERIZAÇÃO E AÇÕES DO GRID (CARDS)
+       4. RENDERIZAÇÃO DO CARD UNIFICADO
        ================================================================ */
     const gridPrincipal = document.getElementById("grid-principal");
 
-    function criarCardHTML(servico, categoria, valor, tipo) {
+    function criarCardHTML(servico, categoria, senha, notas) {
         const novoCard = document.createElement("div");
         novoCard.className = "card-senha";
 
-        let icone = tipo === "senha" ? "fas fa-shield-halved" : "fas fa-file-lines";
+        // Ícone: Prioriza escudo se houver senha, caso contrário ícone de texto
+        let icone = senha.trim() !== "" ? "fas fa-shield-halved" : "fas fa-file-lines";
 
         novoCard.innerHTML = `
             <div class="card-topo">
@@ -145,7 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="card-info-central">
                 <span class="servico-nome">${servico}</span>
-                <div class="preview-texto">${tipo === "senha" ? "••••••••••••" : valor}</div>
+                ${senha.trim() !== "" ? `<div class="preview-texto" style="color:var(--accent-color)">••••••••••••</div>` : ""}
+                ${notas.trim() !== "" ? `<div class="preview-texto notas-preview">${notas}</div>` : ""}
             </div>
             <div class="card-camada-acoes">
                 <button class="btn-acao-card btn-copiar-trigger"><i class="fas fa-copy"></i> Copiar</button>
@@ -153,17 +147,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-        // Evento de Visualizar Detalhes (ao clicar no card)
-        novoCard.addEventListener("click", (e) => {
-            if (!e.target.closest(".card-camada-acoes")) {
-                exibirModalView(servico, categoria, valor);
-            }
-        });
-
-        // Evento de Copiar
+        // Lógica de Copiar: Prioriza a senha, se não houver, copia as notas
         novoCard.querySelector(".btn-copiar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
-            navigator.clipboard.writeText(valor).then(() => {
+            const valorCopiar = senha.trim() !== "" ? senha : notas;
+            
+            navigator.clipboard.writeText(valorCopiar).then(() => {
                 const btn = e.target.closest(".btn-acao-card");
                 const originalHTML = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
@@ -171,7 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // Evento de Deletar
+        // Clique no card para ver detalhes
+        novoCard.addEventListener("click", (e) => {
+            if (!e.target.closest(".card-camada-acoes")) {
+                exibirModalView(servico, categoria, senha, notas);
+            }
+        });
+
+        // Deletar
         novoCard.querySelector(".btn-deletar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
             if (confirm(`Excluir o registro "${servico}"?`)) {
@@ -187,18 +183,26 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ================================================================
        5. MODAL DE VISUALIZAÇÃO (VIEW)
        ================================================================ */
-    function exibirModalView(servico, categoria, valor) {
+    function exibirModalView(servico, categoria, senha, notas) {
         const modalView = document.getElementById("modal-view");
         if (!modalView) return;
 
         document.getElementById("view-titulo").innerText = servico;
         document.getElementById("view-tag").innerText = categoria.toUpperCase();
-        document.getElementById("view-valor").innerText = valor;
+        
+        // Formata o conteúdo para exibição no Modal de View
+        let infoExibir = "";
+        if (senha.trim() !== "") infoExibir += `CHAVE/SENHA: ${senha}\n\n`;
+        if (notas.trim() !== "") infoExibir += `NOTAS:\n${notas}`;
+        if (infoExibir === "") infoExibir = "Sem detalhes adicionais.";
+
+        document.getElementById("view-valor").innerText = infoExibir;
 
         const btnCopiarModal = document.getElementById("btn-copiar-modal");
         btnCopiarModal.onclick = (e) => {
             e.preventDefault();
-            navigator.clipboard.writeText(valor);
+            const valorCopiar = senha.trim() !== "" ? senha : notas;
+            navigator.clipboard.writeText(valorCopiar);
             const icon = btnCopiarModal.querySelector("i");
             icon.className = "fas fa-check";
             setTimeout(() => (icon.className = "far fa-copy"), 2000);
@@ -211,12 +215,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalView = document.getElementById("modal-view");
     if (modalView) {
         const fecharV = () => modalView.classList.remove("modal-visivel");
-        
         document.getElementById("btn-fechar-view")?.addEventListener("click", fecharV);
         document.getElementById("btn-fechar-view-footer")?.addEventListener("click", fecharV);
-        
-        modalView.addEventListener("click", (e) => { 
-            if (e.target === modalView) fecharV(); 
-        });
+        modalView.addEventListener("click", (e) => { if (e.target === modalView) fecharV(); });
     }
 });
