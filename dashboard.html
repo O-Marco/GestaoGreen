@@ -54,132 +54,134 @@
         </div>
     </aside>
 
-   <main class="conteudo-principal">
-    <header class="header-dash">
-        <div class="busca-container">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Pesquisar senhas, sites ou notas..." id="input-busca">
-        </div>
-
-        <div class="acoes-header">
-            <button class="btn-adicionar">
-                <i class="fas fa-plus"></i>
-                <span>Novo Registro</span>
-            </button>
-            <button class="btn-logout" title="Sair do Sistema">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
-        </div>
-    </header>
-
-    <section id="secao-cofre" class="secao-conteudo">
-        <div class="grid-senhas" id="grid-principal">
-            </div>
-    </section>
-
-    <section id="secao-lista" class="secao-conteudo" style="display: none;">
-        <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-list-ul" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
-            <h2 style="color: var(--text-muted);">Sua Lista está vazia</h2>
-        </div>
-    </section>
-
-    <section id="secao-lixeira" class="secao-conteudo" style="display: none;">
-        <div style="padding: 40px; text-align: center;">
-            <i class="fas fa-trash-alt" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
-            <h2 style="color: var(--text-muted);">Lixeira vazia</h2>
-        </div>
-    </section>
-
-    <div class="modal-overlay" id="modal-registro">
-        <div class="modal-caixa">
-            <div class="modal-header">
-                <h3>Novo Registro</h3>
-                <button class="btn-fechar-modal" id="btn-fechar">&times;</button>
+    <main class="conteudo-principal">
+        <header class="header-dash">
+            <div class="busca-container">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Pesquisar senhas, sites ou notas..." id="input-busca">
             </div>
 
-            <form class="modal-form" id="form-novo-registro">
-                <div class="modal-grid-layout">
-                    <div class="coluna-esquerda">
-                        <div class="grupo-input">
-                            <label>Nome do Serviço</label>
-                            <input type="text" id="reg-servico" placeholder="Ex: Google, WiFi..." required>
+            <div class="acoes-header">
+                <button class="btn-adicionar">
+                    <i class="fas fa-plus"></i>
+                    <span>Novo Registro</span>
+                </button>
+                <button class="btn-logout" title="Sair do Sistema">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <section id="secao-cofre" class="secao-conteudo">
+            <div class="grid-senhas" id="grid-principal">
+            </div>
+        </section>
+
+        <section id="secao-lista" class="secao-conteudo" style="display: none;">
+            <div style="padding: 40px; text-align: center;">
+                <i class="fas fa-list-ul" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
+                <h2 style="color: var(--text-muted);">Sua Lista está vazia</h2>
+            </div>
+        </section>
+
+        <section id="secao-lixeira" class="secao-conteudo" style="display: none;">
+            <div style="padding: 40px; text-align: center;">
+                <i class="fas fa-trash-alt"
+                    style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
+                <h2 style="color: var(--text-muted);">Lixeira vazia</h2>
+            </div>
+        </section>
+
+        <div class="modal-overlay" id="modal-registro">
+            <div class="modal-caixa">
+                <div class="modal-header">
+                    <h3>Novo Registro</h3>
+                    <button class="btn-fechar-modal" id="btn-fechar">&times;</button>
+                </div>
+
+                <form class="modal-form" id="form-novo-registro">
+                    <div class="modal-grid-layout">
+                        <div class="coluna-esquerda">
+                            <div class="grupo-input">
+                                <label>Nome do Serviço</label>
+                                <input type="text" id="reg-servico" placeholder="Ex: Google, WiFi..." required>
+                            </div>
+
+                            <div class="grupo-input">
+                                <label>Categoria</label>
+                                <select id="reg-categoria-select">
+                                    <option value="Trabalho">Trabalho</option>
+                                    <option value="Pessoal">Pessoal</option>
+                                    <option value="outra">+ Criar nova...</option>
+                                </select>
+                                <input type="text" id="reg-categoria-nova" placeholder="Qual o nome?"
+                                    style="display: none; margin-top: 8px;">
+                            </div>
+
+                            <div class="grupo-input">
+                                <label>Senha / Chave</label>
+                                <div class="campo-senha-container">
+                                    <input type="password" id="reg-senha" class="input-padrao" placeholder="••••••••">
+                                    <button type="button" class="btn-ver-senha-simples" id="toggle-senha-fixa">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="grupo-input">
-                            <label>Categoria</label>
-                            <select id="reg-categoria-select">
-                                <option value="Trabalho">Trabalho</option>
-                                <option value="Pessoal">Pessoal</option>
-                                <option value="outra">+ Criar nova...</option>
-                            </select>
-                            <input type="text" id="reg-categoria-nova" placeholder="Qual o nome?"
-                                style="display: none; margin-top: 8px;">
-                        </div>
-
-                        <div class="grupo-input">
-                            <label>Senha / Chave</label>
-                            <div class="campo-senha-container">
-                                <input type="password" id="reg-senha" class="input-padrao" placeholder="••••••••">
-                                <button type="button" class="btn-ver-senha-simples" id="toggle-senha-fixa">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                            <label>Notas e Detalhes</label>
+                            <div class="editor-wrapper">
+                                <div class="toolbar-editor" id="toolbar-notas-fixa">
+                                    <button type="button" class="btn-tool" data-char="• " title="Lista"><i
+                                            class="fas fa-list-ul"></i></button>
+                                    <button type="button" class="btn-tool" data-char="--------------------------"
+                                        title="Linha"><i class="fas fa-minus"></i></button>
+                                    <button type="button" class="btn-tool" data-char="📌 " title="Pin">📌</button>
+                                    <button type="button" class="btn-tool" data-char="✅ " title="Check">✅</button>
+                                    <button type="button" class="btn-tool" data-char="⚠️ " title="Aviso">⚠️</button>
+                                </div>
+                                <textarea id="reg-notas"
+                                    placeholder="Escreva observações ou use a barra de ferramentas..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grupo-input">
-                        <label>Notas e Detalhes</label>
-                        <div class="editor-wrapper">
-                            <div class="toolbar-editor" id="toolbar-notas-fixa">
-                                <button type="button" class="btn-tool" data-char="• " title="Lista"><i
-                                        class="fas fa-list-ul"></i></button>
-                                <button type="button" class="btn-tool" data-char="--------------------------"
-                                    title="Linha"><i class="fas fa-minus"></i></button>
-                                <button type="button" class="btn-tool" data-char="📌 " title="Pin">📌</button>
-                                <button type="button" class="btn-tool" data-char="✅ " title="Check">✅</button>
-                                <button type="button" class="btn-tool" data-char="⚠️ " title="Aviso">⚠️</button>
-                            </div>
-                            <textarea id="reg-notas"
-                                placeholder="Escreva observações ou use a barra de ferramentas..."></textarea>
-                        </div>
+                    <div class="modal-rodape">
+                        <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+                        <button type="submit" class="btn-salvar">Salvar Registro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="modal-view">
+            <div class="modal-caixa modal-view-caixa">
+                <div class="modal-header">
+                    <div class="view-header-info">
+                        <span class="view-tag" id="view-tag">CATEGORIA</span>
+                        <h3 id="view-titulo">Nome do Serviço</h3>
+                    </div>
+                    <button class="btn-fechar-modal" id="btn-fechar-view">&times;</button>
+                </div>
+
+                <div class="view-corpo">
+                    <label>CONTEÚDO SALVO</label>
+                    <div class="view-valor-box">
+                        <code id="view-valor">••••••••</code>
+                        <button class="btn-copiar-view" id="btn-copiar-modal" title="Copiar conteúdo">
+                            <i class="far fa-copy"></i>
+                        </button>
                     </div>
                 </div>
 
                 <div class="modal-rodape">
-                    <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
-                    <button type="submit" class="btn-salvar">Salvar Registro</button>
+                    <button class="btn-salvar" id="btn-fechar-view-footer">Fechar</button>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-view">
-        <div class="modal-caixa modal-view-caixa">
-            <div class="modal-header">
-                <div class="view-header-info">
-                    <span class="view-tag" id="view-tag">CATEGORIA</span>
-                    <h3 id="view-titulo">Nome do Serviço</h3>
-                </div>
-                <button class="btn-fechar-modal" id="btn-fechar-view">&times;</button>
-            </div>
-
-            <div class="view-corpo">
-                <label>CONTEÚDO SALVO</label>
-                <div class="view-valor-box">
-                    <code id="view-valor">••••••••</code>
-                    <button class="btn-copiar-view" id="btn-copiar-modal" title="Copiar conteúdo">
-                        <i class="far fa-copy"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="modal-rodape">
-                <button class="btn-salvar" id="btn-fechar-view-footer">Fechar</button>
             </div>
         </div>
-    </div>
-</main>
+
+    </main>
 
 
 

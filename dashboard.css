@@ -291,3 +291,4 @@ select option { background-color: var(--bg-sidebar); color: var(--text-bright); 
     .modal-grid-layout { grid-template-columns: 1fr; gap: 15px; }
     .coluna-direita textarea { min-height: 120px; }
 }
+

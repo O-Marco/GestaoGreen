@@ -203,4 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalView.classList.add("modal-visivel");
     }
+
+    
 });
