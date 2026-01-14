@@ -532,3 +532,97 @@ select option { background-color: var(--bg-sidebar); color: var(--text-bright); 
 .contador-ativo {
     color: var(--accent-color) !important;
 }
+
+/* ================================================================
+   10. ESTILIZAÇÃO DA TABELA (MODO LISTA)
+   ================================================================ */
+.container-tabela {
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.tabela-moderna {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+}
+
+.tabela-moderna thead {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tabela-moderna th {
+    padding: 15px 20px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.tabela-moderna td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-bright);
+    vertical-align: middle;
+}
+
+.tabela-moderna tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela-moderna tr:hover {
+    background: var(--bg-item-hover);
+}
+
+/* Estilos específicos das colunas */
+.col-servico {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+}
+
+.col-senha-code {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-color);
+    background: var(--accent-soft);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.col-notas-preview {
+    color: var(--text-muted);
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.acoes-tabela {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.btn-tabela {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-tabela:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    background: var(--accent-soft);
+}

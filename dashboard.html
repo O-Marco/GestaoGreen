@@ -78,11 +78,27 @@
         </section>
 
         <section id="secao-lista" class="secao-conteudo" style="display: none;">
-            <div class="grid-senhas" id="grid-lista">
-                <div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;">
+            <div class="container-tabela">
+                <table class="tabela-moderna">
+                    <thead>
+                        <tr>
+                            <th>Serviço</th>
+                            <th>Categoria</th>
+                            <th>Senha/Chave</th>
+                            <th>Notas</th>
+                            <th style="text-align: right;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-lista">
+                    </tbody>
+                </table>
+
+                <div id="lista-vazia-placeholder" style="display: none; padding: 60px; text-align: center;">
                     <i class="fas fa-list-ul"
                         style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
-                    <h2 style="color: var(--text-muted);">Sua Lista está vazia</h2>
+                    <h2 style="color: var(--text-muted);">Sua lista está vazia</h2>
+                    <p style="color: var(--text-muted); font-size: 14px;">Envie itens do cofre para cá para organizar
+                        sua fila.</p>
                 </div>
             </div>
         </section>

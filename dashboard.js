@@ -52,11 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-fechar-view-footer")?.addEventListener("click", fecharView);
 
   [modalReg, modalView].forEach((m) => {
-    m?.addEventListener("click", (e) => { if (e.target === m) m.classList.remove("modal-visivel"); });
+    m?.addEventListener("click", (e) => {
+      if (e.target === m) m.classList.remove("modal-visivel");
+    });
   });
 
   /* ================================================================
-       3. LÓGICA DO FORMULÁRIO E AÇÕES
+       3. LÓGICA DO FORMULÁRIO E AÇÕES DA LIXEIRA
        ================================================================ */
   const inputSenhaFixa = document.getElementById("reg-senha");
   const textareaNotas = document.getElementById("reg-notas");
@@ -74,27 +76,15 @@ document.addEventListener("DOMContentLoaded", () => {
     inputNovaCat.style.display = selectCat.value === "outra" ? "block" : "none";
   });
 
-  document.querySelectorAll(".btn-tool").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const char = btn.getAttribute("data-char");
-      const start = textareaNotas.selectionStart;
-      const end = textareaNotas.selectionEnd;
-      textareaNotas.value = textareaNotas.value.substring(0, start) + char + textareaNotas.value.substring(end);
-      textareaNotas.focus();
-      textareaNotas.selectionStart = textareaNotas.selectionEnd = start + char.length;
-    });
-  });
-
   formRegistro?.addEventListener("submit", (e) => {
     e.preventDefault();
     const novoItem = {
-      id: Date.now(), // ID ÚNICO PARA EVITAR BUG DE NOMES IGUAIS
+      id: Date.now(),
       servico: document.getElementById("reg-servico").value,
       categoria: selectCat.value === "outra" ? inputNovaCat.value : selectCat.value,
       senha: inputSenhaFixa.value,
       notas: textareaNotas.value,
-      local: "cofre"
+      local: "cofre",
     };
     salvarDadosNoBanco(novoItem);
     carregarDadosIniciais();
@@ -103,9 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("btn-esvaziar-lixeira")?.addEventListener("click", () => {
     let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-    if (!dados.some(i => i.local === "lixeira")) return alert("A lixeira já está vazia!");
+    if (!dados.some((i) => i.local === "lixeira")) return alert("A lixeira já está vazia!");
     if (confirm("Apagar TUDO da lixeira permanentemente?")) {
-      dados = dados.filter(i => i.local !== "lixeira");
+      dados = dados.filter((i) => i.local !== "lixeira");
       localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
       carregarDadosIniciais();
     }
@@ -113,12 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("btn-excluir-selecionados")?.addEventListener("click", () => {
     const selecionados = document.querySelectorAll(".card-checkbox:checked");
-    if (selecionados.length === 0) return alert("Selecione ao menos um card.");
+    if (selecionados.length === 0) return alert("Selecione itens para excluir.");
     if (confirm(`Excluir ${selecionados.length} itens permanentemente?`)) {
       let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-      selecionados.forEach(cb => {
-        const id = Number(cb.getAttribute("data-id"));
-        dados = dados.filter(item => item.id !== id);
+      selecionados.forEach((cb) => {
+        const idParaRemover = Number(cb.getAttribute("data-id"));
+        dados = dados.filter((item) => item.id !== idParaRemover);
       });
       localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
       carregarDadosIniciais();
@@ -126,20 +116,55 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ================================================================
-       4. RENDERIZAÇÃO DE CARDS
+       4. PERSISTÊNCIA E FUNÇÕES DE APOIO
+       ================================================================ */
+  function salvarDadosNoBanco(objeto) {
+    const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+    dados.push(objeto);
+    localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+  }
+
+  function removerDadosNoBanco(id) {
+    let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+    dados = dados.filter((item) => item.id !== id);
+    localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+    carregarDadosIniciais();
+  }
+
+  function moverParaLocal(id, novoLocal) {
+    let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+    const index = dados.findIndex((item) => item.id === id);
+    if (index !== -1) {
+      dados[index].local = novoLocal;
+      localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+      carregarDadosIniciais();
+    }
+  }
+
+  function atualizarContadorLixeira() {
+    const grid = document.getElementById("grid-lixeira");
+    if (!grid) return;
+    const total = grid.querySelectorAll(".card-senha").length;
+    const sel = grid.querySelectorAll(".card-checkbox:checked").length;
+    const el = document.getElementById("contador-lixeira");
+    if (el) el.innerText = sel > 0 ? `${sel} de ${total} selecionados` : `${total} itens`;
+  }
+
+  /* ================================================================
+       5. RENDERIZAÇÃO (CARDS E TABELA)
        ================================================================ */
   function criarCardUnificado(item) {
     const { id, servico, categoria, senha, notas, local } = item;
-    let gridId = local === "lista" ? "grid-lista" : (local === "lixeira" ? "grid-lixeira" : "grid-principal");
-    const gridDestino = document.getElementById(gridId);
+    const gridDestino = document.getElementById(local === "lixeira" ? "grid-lixeira" : "grid-principal");
     if (!gridDestino) return;
 
     const novoCard = document.createElement("div");
     novoCard.className = "card-senha";
     const temSenha = senha && senha.trim() !== "";
     const temNota = notas && notas.trim() !== "";
-    let statusTipo = temSenha && temNota ? "status-misto" : (temSenha ? "status-senha" : "status-nota");
-    let iconeClass = temSenha && temNota ? "fas fa-vault" : (temSenha ? "fas fa-lock" : "fas fa-sticky-note");
+
+    let statusTipo = temSenha && temNota ? "status-misto" : temSenha ? "status-senha" : "status-nota";
+    let iconeClass = temSenha && temNota ? "fas fa-vault" : temSenha ? "fas fa-lock" : "fas fa-sticky-note";
 
     novoCard.innerHTML = `
       ${local === "lixeira" ? `<div class="card-checkbox-container"><input type="checkbox" class="card-checkbox" data-id="${id}" onclick="event.stopPropagation(); atualizarContadorLixeira();"></div>` : ""}
@@ -153,8 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <div class="card-camada-acoes">
         <button class="btn-acao-card btn-copiar-trigger" title="Copiar"><i class="fas fa-copy"></i></button>
-        <button class="btn-acao-card btn-importar-trigger" title="${local === "lixeira" ? "Restaurar" : "Mover para Lista"}">
-          <i class="${local === "lixeira" ? "fas fa-undo" : "fas fa-arrow-right-to-bracket"}"></i>
+        <button class="btn-acao-card btn-mover-trigger" title="${local === "lixeira" ? "Restaurar" : "Enviar para Lista"}">
+          <i class="${local === "lixeira" ? "fas fa-undo" : "fas fa-list-ul"}"></i>
         </button>
         <button class="btn-acao-card btn-deletar-trigger" title="Excluir"><i class="fas fa-trash-alt"></i></button>
       </div>
@@ -163,12 +188,11 @@ document.addEventListener("DOMContentLoaded", () => {
     novoCard.querySelector(".btn-copiar-trigger").addEventListener("click", (e) => {
       e.stopPropagation();
       navigator.clipboard.writeText(senha || notas);
-      const icon = e.currentTarget.querySelector("i");
-      icon.className = "fas fa-check";
-      setTimeout(() => icon.className = "fas fa-copy", 1000);
+      e.currentTarget.querySelector("i").className = "fas fa-check";
+      setTimeout(() => (e.currentTarget.querySelector("i").className = "fas fa-copy"), 1000);
     });
 
-    novoCard.querySelector(".btn-importar-trigger").addEventListener("click", (e) => {
+    novoCard.querySelector(".btn-mover-trigger").addEventListener("click", (e) => {
       e.stopPropagation();
       moverParaLocal(id, local === "lixeira" ? "cofre" : "lista");
     });
@@ -184,70 +208,130 @@ document.addEventListener("DOMContentLoaded", () => {
 
     novoCard.addEventListener("click", (e) => {
       if (!e.target.closest(".card-camada-acoes") && !e.target.closest(".card-checkbox")) {
-        exibirModalView(servico, categoria, senha, notas);
+        exibirModalView(id, servico, categoria, senha, notas);
       }
     });
 
     gridDestino.prepend(novoCard);
   }
 
-  /* ================================================================
-       5. PERSISTÊNCIA E LOGICA DE DADOS
-       ================================================================ */
-  function salvarDadosNoBanco(objeto) {
-    const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-    dados.push(objeto);
-    localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
-  }
-
-  function removerDadosNoBanco(id) {
-    let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-    dados = dados.filter(item => item.id !== id);
-    localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
-    carregarDadosIniciais();
-  }
-
-  function moverParaLocal(id, novoLocal) {
-    let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-    const index = dados.findIndex(item => item.id === id);
-    if (index !== -1) {
-      dados[index].local = novoLocal;
-      localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
-      carregarDadosIniciais();
-    }
+  function criarLinhaTabela(item) {
+    const corpoTabela = document.getElementById("corpo-tabela-lista");
+    if (!corpoTabela) return;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td><div class="col-servico"><div class="servico-icone status-misto" style="width: 28px; height: 28px; font-size: 12px;"><i class="fas fa-globe"></i></div>${item.servico}</div></td>
+        <td><span class="tag-categoria">${item.categoria}</span></td>
+        <td><span class="col-senha-code">${item.senha ? "••••••••" : "---"}</span></td>
+        <td><div class="col-notas-preview">${item.notas || "<em>Sem notas</em>"}</div></td>
+        <td style="text-align: right;"><div class="acoes-tabela">
+          <button class="btn-tabela btn-copiar-lista"><i class="fas fa-copy"></i></button>
+          <button class="btn-tabela btn-excluir-lista" style="color: #ff4d4d"><i class="fas fa-trash-alt"></i></button>
+        </div></td>
+    `;
+    tr.querySelector(".btn-copiar-lista").addEventListener("click", (e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(item.senha || item.notas || "");
+      alert("Copiado!");
+    });
+    tr.querySelector(".btn-excluir-lista").addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (confirm("Mover para lixeira?")) moverParaLocal(item.id, "lixeira");
+    });
+    tr.addEventListener("click", () => exibirModalView(item.id, item.servico, item.categoria, item.senha, item.notas));
+    corpoTabela.appendChild(tr);
   }
 
   function carregarDadosIniciais() {
     const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-    ["grid-principal", "grid-lista", "grid-lixeira"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = (id === "grid-lixeira" && !dados.some(i => i.local === "lixeira")) ? '<div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;"><i class="fas fa-trash-alt" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i><h2 style="color: var(--text-muted);">Lixeira vazia</h2></div>' : "";
+    const gridPrincipal = document.getElementById("grid-principal");
+    const gridLixeira = document.getElementById("grid-lixeira");
+    const corpoTabela = document.getElementById("corpo-tabela-lista");
+    const placeholderLista = document.getElementById("lista-vazia-placeholder");
+    const tabelaElemento = document.querySelector(".tabela-moderna");
+
+    if (gridPrincipal) gridPrincipal.innerHTML = "";
+    if (gridLixeira) gridLixeira.innerHTML = "";
+    if (corpoTabela) corpoTabela.innerHTML = "";
+
+    const itensLista = dados.filter((i) => i.local === "lista");
+    if (placeholderLista && tabelaElemento) {
+      placeholderLista.style.display = itensLista.length === 0 ? "block" : "none";
+      tabelaElemento.style.display = itensLista.length === 0 ? "none" : "table";
+    }
+
+    dados.forEach((item) => {
+      if (item.local === "lista") { criarLinhaTabela(item); } 
+      else { criarCardUnificado(item); }
     });
-    dados.forEach(item => criarCardUnificado(item));
     atualizarContadorLixeira();
   }
 
-  function exibirModalView(servico, categoria, senha, notas) {
+  /* ================================================================
+       6. VISUALIZAÇÃO E EDIÇÃO (LÓGICA REFEITA)
+       ================================================================ */
+  function exibirModalView(id, servico, categoria, senha, notas) {
+    const viewValorBox = document.querySelector(".view-valor-box");
+    const viewValorElemento = document.getElementById("view-valor");
+    const modalView = document.getElementById("modal-view");
+
     document.getElementById("view-titulo").innerText = servico;
     document.getElementById("view-tag").innerText = categoria.toUpperCase();
-    let conteudo = (senha ? `CHAVE/SENHA: ${senha}\n\n` : "") + (notas ? `NOTAS:\n${notas}` : "");
-    document.getElementById("view-valor").innerText = conteudo || "Sem detalhes.";
-    document.getElementById("modal-view").classList.add("modal-visivel");
-    document.getElementById("btn-copiar-modal").onclick = () => {
-      navigator.clipboard.writeText(senha || notas);
-      const icon = document.querySelector("#btn-copiar-modal i");
+    
+    // Define o texto inicial
+    const textoInicial = senha || notas || "";
+    viewValorElemento.innerText = textoInicial || "Clique para adicionar...";
+    
+    modalView.classList.add("modal-visivel");
+
+    // Limpa eventos antigos da caixa inteira para não duplicar prompts
+    const novaBox = viewValorBox.cloneNode(true);
+    viewValorBox.parentNode.replaceChild(novaBox, viewValorBox);
+
+    // Adiciona evento na BOX (fica mais fácil de clicar)
+    novaBox.style.cursor = "pointer";
+    novaBox.addEventListener("click", (e) => {
+        // Se clicar no botão de copiar, não abre o prompt
+        if (e.target.closest("#btn-copiar-modal")) return;
+
+        const valorAtual = novaBox.querySelector("#view-valor").innerText;
+        const inputEditar = (valorAtual === "Clique para adicionar...") ? "" : valorAtual;
+        
+        const novoTexto = prompt(`Editar ${servico}:`, inputEditar);
+        
+        if (novoTexto !== null) {
+            salvarEdicaoNoBanco(id, novoTexto);
+        }
+    });
+
+    // Reatribui o clique do botão de copiar (já que clonamos a box)
+    novaBox.querySelector("#btn-copiar-modal").onclick = (e) => {
+      e.stopPropagation();
+      const texto = novaBox.querySelector("#view-valor").innerText;
+      navigator.clipboard.writeText(texto);
+      const icon = novaBox.querySelector("#btn-copiar-modal i");
       icon.className = "fas fa-check";
-      setTimeout(() => icon.className = "far fa-copy", 1000);
+      setTimeout(() => (icon.className = "far fa-copy"), 1000);
     };
   }
 
-  function atualizarContadorLixeira() {
-    const grid = document.getElementById("grid-lixeira");
-    if (!grid) return;
-    const total = grid.querySelectorAll(".card-senha").length;
-    const sel = grid.querySelectorAll(".card-checkbox:checked").length;
-    const el = document.getElementById("contador-lixeira");
-    if (el) el.innerText = sel > 0 ? `${sel} de ${total} selecionados` : `${total} itens`;
+  function salvarEdicaoNoBanco(id, novoTexto) {
+    let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+    const index = dados.findIndex(i => i.id === id);
+
+    if (index !== -1) {
+        // Lógica: Se o item já tinha senha, edita a senha. Caso contrário, edita notas.
+        if (dados[index].senha) {
+            dados[index].senha = novoTexto;
+        } else {
+            dados[index].notas = novoTexto;
+        }
+
+        localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+        carregarDadosIniciais(); // Recarrega a interface
+        document.getElementById("modal-view").classList.remove("modal-visivel");
+        alert("Alteração salva!");
+    }
   }
 
   carregarDadosIniciais();
