@@ -102,42 +102,192 @@ body, html {
 .btn-logout:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.2); }
 
 /* ================================================================
-   4. SISTEMA DE CARDS (COFRE)
+   4. SISTEMA DE CARDS (COFRE) - DESIGN ATUALIZADO
    ================================================================ */
-.card-senha {
-    min-height: 180px;
-    height: auto;
-    background: #1c2128;
-    border: 1px solid var(--border-color);
-    padding-bottom: 54px; /* Espaço para a barra de ações */
-    display: flex;
-    flex-direction: column;
-    border-radius: 16px; /* Adicionado para suavizar cantos */
-    transition: transform 0.2s;
+
+/* Grid de Layout - Ajustado para cards menores */
+.grid-senhas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    padding: 10px 0;
 }
 
+/* O Card Principal - Mais baixo e elegante */
+.card-senha {
+    background: linear-gradient(145deg, #1c2128, #161b22);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 15px; /* Reduzido de 20px */
+    position: relative;
+    transition: all 0.3s var(--anim-curve);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 130px; /* Reduzido de 160px */
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Efeito de Hover - Brilho mais sutil */
 .card-senha:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
+    border-color: rgba(46, 160, 67, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Topo do Card */
+.card-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Ícones menores e mais arredondados */
+.servico-icone {
+    width: 36px; /* Reduzido de 45px */
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.tag-categoria {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+/* Informações Centrais */
+.servico-nome {
+    display: block;
+    font-size: 15px; /* Reduzido de 18px */
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 2px;
 }
 
 .senha-focada {
     color: var(--accent-color);
-    font-weight: bold;
     letter-spacing: 2px;
-    margin-top: 8px;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0.9;
 }
 
+/* Barra de Ações mais fina */
+.card-camada-acoes {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(22, 27, 34, 0.98);
+    display: flex;
+    padding: 8px; /* Mais fino */
+    gap: 6px;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-acao-card {
+    padding: 6px;
+    font-size: 11px;
+    border-radius: 6px;
+}
+
+/* Cores dos Ícones (Mantendo sua solicitação) */
+.status-senha { background: rgba(46, 160, 67, 0.1) !important; color: #2ea043 !important; }
+.status-nota { background: rgba(56, 139, 253, 0.1) !important; color: #58a6ff !important; }
+.status-misto { background: rgba(188, 142, 255, 0.1) !important; color: #bc8eff !important; }
+/* ================================================================
+   4.1 ESTILIZAÇÃO DOS TIPOS DE ÍCONE
+   ================================================================ */
+
+/* Apenas Senha - Verde */
+.status-senha {
+    background: rgba(46, 160, 67, 0.15) !important;
+    color: #2ea043 !important;
+}
+
+/* Apenas Nota - Azul */
+.status-nota {
+    background: rgba(56, 139, 253, 0.15) !important;
+    color: #58a6ff !important;
+}
+
+/* Misto (Senha + Nota) - Roxo/Dourado */
+.status-misto {
+    background: rgba(188, 142, 255, 0.15) !important;
+    color: #8eff9d !important;
+}
+
+/* Ajuste fino para notas no card não quebrarem o layout */
 .notas-sutil {
-    font-size: 11px !important;
-    opacity: 0.6;
-    margin-top: 6px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Corta o texto em 2 linhas */
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.4;
+    font-size: 12px;
+    margin-top: 4px;
+    opacity: 0.8;
 }
+
+/* ================================================================
+   4.2 RODAPÉ DO CARD - AÇÕES (COPIAR, EXCLUIR, IMPORTAR)
+   ================================================================ */
+
+/* Camada de Ações - Layout para 3 botões */
+.card-camada-acoes {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(22, 27, 34, 0.98);
+    backdrop-filter: blur(8px);
+    display: flex;
+    padding: 8px;
+    gap: 6px;
+    transform: translateY(100%); /* Escondido por padrão */
+    transition: transform 0.25s var(--anim-curve);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Exibe ao passar o mouse no card */
+.card-senha:hover .card-camada-acoes {
+    transform: translateY(0);
+}
+
+/* Botões de Ação Individuais */
+.btn-acao-card {
+    flex: 1; /* Faz os botões dividirem o espaço igualmente */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-bright);
+    padding: 6px 4px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: 0.2s;
+}
+
+/* Cores específicas no Hover */
+.btn-acao-card:hover { background: var(--accent-soft); border-color: var(--accent-color); color: var(--accent-color); }
+.btn-deletar-trigger:hover { background: rgba(255, 77, 77, 0.1) !important; border-color: #ff4d4d !important; color: #ff4d4d !important; }
+.btn-importar-trigger:hover { background: rgba(56, 139, 253, 0.1) !important; border-color: #58a6ff !important; color: #58a6ff !important; }
 
 /* ================================================================
    5. MODAIS (GERAL, REGISTRO E VISUALIZAÇÃO)
