@@ -115,14 +115,21 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ================================================================
        4. RENDERIZAÇÃO E PERSISTÊNCIA (CARDS E LOCALSTORAGE)
        ================================================================ */
-    function criarCardUnificado(servico, categoria, senha, notas, deveSalvar = true) {
-        const gridPrincipal = document.getElementById("grid-principal");
-        if (!gridPrincipal) return;
+    
+    // Adicionei o parâmetro localAlvo para o F5 saber onde colocar o card
+    function criarCardUnificado(servico, categoria, senha, notas, deveSalvar = true, localAlvo = 'cofre') {
+        
+        // Seleciona a grid correta (grid-principal, grid-lista ou grid-lixeira)
+        let gridId = "grid-principal";
+        if (localAlvo === 'lista') gridId = "grid-lista";
+        if (localAlvo === 'lixeira') gridId = "grid-lixeira";
+
+        const gridDestino = document.getElementById(gridId);
+        if (!gridDestino) return;
 
         const novoCard = document.createElement("div");
         novoCard.className = "card-senha";
 
-        // Lógica de Ícones Dinâmicos
         const temSenha = senha && senha.trim() !== "";
         const temNota = notas && notas.trim() !== "";
         let iconeClass = temSenha ? "fas fa-lock" : "fas fa-sticky-note";
@@ -145,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-        // Eventos dos botões do card
+        // 1. Copiar
         novoCard.querySelector(".btn-copiar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
             navigator.clipboard.writeText(senha || notas);
@@ -154,16 +161,17 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => icon.className = "fas fa-copy", 1000);
         });
 
+        // 2. Mover para Lista (Seta) - ATUALIZADO
         novoCard.querySelector(".btn-importar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
-            moverParaLista(servico, novoCard);
+            moverParaLocal(servico, 'lista', novoCard);
         });
 
+        // 3. Mover para Lixeira (Botão Lixeira) - ATUALIZADO
         novoCard.querySelector(".btn-deletar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
-            if (confirm(`Excluir "${servico}" permanentemente?`)) {
-                removerDados(servico);
-                novoCard.remove();
+            if (confirm(`Mover "${servico}" para a lixeira?`)) {
+                moverParaLocal(servico, 'lixeira', novoCard);
             }
         });
 
@@ -177,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
             salvarDados({ servico, categoria, senha, notas, local: 'cofre' });
         }
 
-        gridPrincipal.prepend(novoCard);
+        gridDestino.prepend(novoCard);
     }
 
     /* ================================================================
@@ -191,34 +199,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function carregarDadosIniciais() {
         const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+        
+        // Limpa as grids antes de carregar para não duplicar
+        const grids = ["grid-principal", "grid-lista", "grid-lixeira"];
+        grids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
+
         dados.forEach(item => {
-            if (item.local === 'cofre') {
-                criarCardUnificado(item.servico, item.categoria, item.senha, item.notas, false);
-            }
+            // Passamos o local que está salvo no banco (item.local)
+            criarCardUnificado(item.servico, item.categoria, item.senha, item.notas, false, item.local || 'cofre');
         });
+    }
+
+    // NOVA FUNÇÃO: Move o item entre as abas no banco e na tela
+    function moverParaLocal(nome, novoLocal, cardElemento) {
+        let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+        const index = dados.findIndex(item => item.servico === nome);
+        
+        if (index !== -1) {
+            dados[index].local = novoLocal; // Altera de 'cofre' para 'lista' ou 'lixeira'
+            localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+            
+            // Efeito visual de saída
+            cardElemento.style.transform = "scale(0.8)";
+            cardElemento.style.opacity = "0";
+            setTimeout(() => {
+                cardElemento.remove();
+                // Recarrega os dados para aparecerem nas grids corretas
+                carregarDadosIniciais();
+                alert(`"${nome}" movido com sucesso!`);
+            }, 300);
+        }
     }
 
     function removerDados(nome) {
         let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
         dados = dados.filter(item => item.servico !== nome);
         localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
-    }
-
-    function moverParaLista(nome, cardElemento) {
-        let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-        const index = dados.findIndex(item => item.servico === nome);
-        
-        if (index !== -1) {
-            dados[index].local = 'lista';
-            localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
-            
-            cardElemento.style.transform = "translateX(100px)";
-            cardElemento.style.opacity = "0";
-            setTimeout(() => {
-                cardElemento.remove();
-                alert(`"${nome}" movido para a seção Lista!`);
-            }, 300);
-        }
     }
 
     function exibirModalView(servico, categoria, senha, notas) {

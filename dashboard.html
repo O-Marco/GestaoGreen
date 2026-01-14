@@ -78,17 +78,20 @@
         </section>
 
         <section id="secao-lista" class="secao-conteudo" style="display: none;">
-            <div style="padding: 40px; text-align: center;">
-                <i class="fas fa-list-ul" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
-                <h2 style="color: var(--text-muted);">Sua Lista está vazia</h2>
+            <div class="grid-senhas" id="grid-lista">
+                <div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;">
+                    <i class="fas fa-list-ul" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
+                    <h2 style="color: var(--text-muted);">Sua Lista está vazia</h2>
+                </div>
             </div>
         </section>
 
         <section id="secao-lixeira" class="secao-conteudo" style="display: none;">
-            <div style="padding: 40px; text-align: center;">
-                <i class="fas fa-trash-alt"
-                    style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
-                <h2 style="color: var(--text-muted);">Lixeira vazia</h2>
+            <div class="grid-senhas" id="grid-lixeira">
+                <div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;">
+                    <i class="fas fa-trash-alt" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
+                    <h2 style="color: var(--text-muted);">Lixeira vazia</h2>
+                </div>
             </div>
         </section>
 
@@ -182,10 +185,6 @@
         </div>
 
     </main>
-
-
-
-
 
     <script src="dashboard.js"></script>
 </body>
