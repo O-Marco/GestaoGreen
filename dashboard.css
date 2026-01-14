@@ -477,17 +477,58 @@ select option { background-color: var(--bg-sidebar); color: var(--text-bright); 
     background: rgba(248, 81, 73, 0.1);
 }
 
-/* Checkbox flutuante no card */
+/* Estilização moderna do Checkbox */
 .card-checkbox-container {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 5;
+    top: -1px;
+    right: 1px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-checkbox {
-    width: 18px;
-    height: 18px;
+    appearance: none; /* Remove o estilo padrão feio */
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-sidebar);
     cursor: pointer;
-    accent-color: var(--accent-color);
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-checkbox:checked {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Ícone de check branco quando marcado */
+.card-checkbox:checked::after {
+    content: "\f00c"; /* FontAwesome Check icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: white;
+    font-size: 11px;
+}
+
+.card-checkbox:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px var(--accent-soft);
+}
+
+/* Estilo do Contador no cabeçalho */
+#contador-lixeira {
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.contador-ativo {
+    color: var(--accent-color) !important;
 }
