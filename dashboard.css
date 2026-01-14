@@ -27,7 +27,7 @@ body, html {
 }
 
 /* ================================================================
-   2. ESTRUTURA DA SIDEBAR (NAVEGAÇÃO)
+   2. SIDEBAR (NAVEGAÇÃO) E PERFIL
    ================================================================ */
 .barra-lateral {
     position: fixed; left: 0; top: 0; height: 100vh;
@@ -49,7 +49,7 @@ body, html {
 .logo-texto { font-size: 20px; font-weight: 600; margin-left: 15px; opacity: 0; transition: 0.2s; }
 .barra-lateral.aberta .logo-texto { opacity: 1; }
 
-/* Itens do Menu */
+/* Menu Itens */
 .menu-navegacao { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .item-menu { display: flex; align-items: center; padding: 12px; color: var(--text-muted); text-decoration: none; border-radius: 8px; transition: 0.2s; white-space: nowrap; }
 .item-menu i { font-size: 18px; min-width: 30px; text-align: center; }
@@ -58,13 +58,13 @@ body, html {
 .item-menu:hover { background: var(--bg-item-hover); color: var(--text-bright); }
 .item-menu.ativo { background: var(--accent-soft); color: var(--accent-color); }
 
-/* Rodapé Sidebar e Toggle */
+/* Toggle e Rodapé Sidebar */
 .rodape-sidebar { border-top: 1px solid var(--border-color); padding-top: 15px; display: flex; flex-direction: column; align-items: center; }
 .btn-toggle-seta { background: var(--bg-item-hover); border: 1px solid var(--border-color); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; transition: all 0.5s ease; }
 .btn-toggle-seta:hover { background: var(--accent-color); color: #fff; }
 .barra-lateral.aberta .btn-toggle-seta { transform: rotate(180deg); align-self: flex-end; }
 
-/* Perfil do Usuário */
+/* Perfil Usuario */
 .perfil-usuario { display: flex; align-items: center; padding: 8px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; cursor: pointer; width: 100%; }
 .avatar-container { position: relative; min-width: 36px; height: 36px; background: #30363d; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
 .status-online { position: absolute; bottom: -2px; right: -2px; width: 10px; height: 10px; background: var(--accent-color); border: 2px solid var(--bg-sidebar); border-radius: 50%; }
@@ -76,7 +76,7 @@ body, html {
 .barra-lateral.aberta .btn-config { display: block; }
 
 /* ================================================================
-   3. CONTEÚDO PRINCIPAL E HEADER
+   3. CONTEÚDO PRINCIPAL (DASHBOARD)
    ================================================================ */
 .conteudo-principal {
     margin-left: var(--sb-width-collapsed);
@@ -94,7 +94,7 @@ body, html {
 .busca-container:focus-within { border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--accent-soft); }
 .busca-container input { background: transparent; border: none; color: var(--text-bright); font-size: 14px; outline: none; width: 100%; }
 
-/* Botões de Ação */
+/* Botões de Ação Dashboard */
 .acoes-header { display: flex; align-items: center; gap: 15px; }
 .btn-adicionar { background: var(--accent-color); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
 .btn-adicionar:hover { filter: brightness(1.1); transform: translateY(-2px); }
@@ -102,7 +102,45 @@ body, html {
 .btn-logout:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.2); }
 
 /* ================================================================
-   4. MODAL DE REGISTRO (FORMULÁRIO FIXO EM COLUNAS)
+   4. SISTEMA DE CARDS (COFRE)
+   ================================================================ */
+.card-senha {
+    min-height: 180px;
+    height: auto;
+    background: #1c2128;
+    border: 1px solid var(--border-color);
+    padding-bottom: 54px; /* Espaço para a barra de ações */
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px; /* Adicionado para suavizar cantos */
+    transition: transform 0.2s;
+}
+
+.card-senha:hover {
+    transform: translateY(-4px);
+}
+
+.senha-focada {
+    color: var(--accent-color);
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.notas-sutil {
+    font-size: 11px !important;
+    opacity: 0.6;
+    margin-top: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Corta o texto em 2 linhas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+/* ================================================================
+   5. MODAIS (GERAL, REGISTRO E VISUALIZAÇÃO)
    ================================================================ */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; }
 .modal-visivel { display: flex; }
@@ -117,153 +155,131 @@ body, html {
     box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 
-.modal-grid-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 30px;
-    margin-top: 10px;
-}
-
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
 .modal-header h3 { margin: 0; font-size: 22px; }
 .btn-fechar-modal { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; transition: color 0.2s; }
 .btn-fechar-modal:hover { color: #ff4d4d; }
 
-/* Estilo dos Grupos de Input */
-.grupo-input { 
-    margin-bottom: 20px; 
-}
+/* 5.1 Modal Registro (Formulário) */
+.modal-grid-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; margin-top: 10px; }
+.grupo-input { margin-bottom: 20px; }
+.grupo-input label { display: block; color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
 
-.grupo-input label { 
-    display: block; 
-    color: var(--text-muted); 
-    font-size: 12px; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    margin-bottom: 8px; 
-    letter-spacing: 0.5px; 
-}
-
-/* Campos de entrada: Input, Select e Textarea */
 .grupo-input input, 
 .grupo-input select, 
 .grupo-input textarea { 
     width: 100%; 
-    background: rgba(255, 255, 255, 0.05); /* Fundo sutilmente claro para contraste */
+    background: rgba(255, 255, 255, 0.05); 
     border: 1px solid var(--border-color); 
     padding: 12px; 
     border-radius: 10px; 
-    color: var(--text-bright); /* Garante que o texto digitado seja claro */
+    color: var(--text-bright); 
     outline: none; 
     font-family: inherit;
     transition: 0.3s; 
 }
 
-/* Foco: Melhora a borda e o brilho ao clicar */
-.grupo-input input:focus, 
-.grupo-input select:focus, 
-.grupo-input textarea:focus { 
+.grupo-input input:focus, .grupo-input select:focus, .grupo-input textarea:focus { 
     border-color: var(--accent-color); 
-    background: rgba(255, 255, 255, 0.1); /* Escurece levemente o fundo no foco */
+    background: rgba(255, 255, 255, 0.1); 
     box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-/* Correção de visibilidade para as opções do SELECT */
-.grupo-input select option {
-    background-color: var(--bg-sidebar); /* Força o fundo escuro do seu tema */
-    color: var(--text-bright);           /* Força o texto claro nas opções */
-    padding: 10px;
-}
-
-/* Ajuste para navegadores que ignoram o estilo das options */
+/* Customização Select */
 .grupo-input select {
-    appearance: none; /* Remove o estilo padrão do sistema */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 16px;
-    padding-right: 40px; /* Espaço para a seta personalizada */
+    padding-right: 40px;
 }
-/* Coluna de Notas */
-.coluna-direita { display: flex; flex-direction: column; }
-.coluna-direita .full-height { flex: 1; display: flex; flex-direction: column; margin-bottom: 0; }
-.coluna-direita textarea { 
-    flex: 1; 
-    min-height: 200px; 
-    resize: none; 
-    line-height: 1.6;
-}
+select option { background-color: var(--bg-sidebar); color: var(--text-bright); }
 
-/* Senha e Olho */
+/* Campo Senha e Olho */
 .campo-senha-container { position: relative; display: flex; align-items: center; }
-.btn-ver-senha-simples { 
-    position: absolute; 
-    right: 12px; 
-    background: none; 
-    border: none; 
-    color: var(--text-muted); 
-    cursor: pointer; 
-    font-size: 16px;
-    padding: 5px;
-}
+.btn-ver-senha-simples { position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 5px; }
 .btn-ver-senha-simples:hover { color: var(--text-bright); }
 
-/* Rodapé do Modal */
+/* Rodapé Modal */
 .modal-rodape { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
 .btn-cancelar { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; padding: 10px 20px; }
-.btn-cancelar:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1);border-radius: 10px }
+.btn-cancelar:hover { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border-radius: 10px; }
 .btn-salvar { background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
 .btn-salvar:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-/* ================================================================
-   4.2 MODAL DE VISUALIZAÇÃO (VIEW)
-   ================================================================ */
-.modal-view-caixa {
-    max-width: 400px;
-    border: 1px solid var(--accent-soft);
-    animation: surgirCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
+/* 5.2 Modal Visualização (View) */
+.modal-view-caixa { max-width: 400px; border: 1px solid var(--accent-soft); animation: surgirCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .view-header-info { display: flex; flex-direction: column; gap: 4px; }
 .view-tag { font-size: 10px; font-weight: 800; color: var(--accent-color); letter-spacing: 1px; }
 .view-corpo { margin: 20px 0; }
 .view-corpo label { font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; display: block; }
-
-.view-valor-box {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
+.view-valor-box { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
 .view-valor-box code { font-family: 'JetBrains Mono', monospace; color: var(--text-bright); font-size: 15px; word-break: break-all; }
-
-.btn-copiar-view {
-    background: var(--accent-soft);
-    border: 1px solid var(--accent-color);
-    color: var(--accent-color);
-    width: 38px; height: 38px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-    flex-shrink: 0;
-}
+.btn-copiar-view { background: var(--accent-soft); border: 1px solid var(--accent-color); color: var(--accent-color); width: 38px; height: 38px; border-radius: 8px; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
 .btn-copiar-view:hover { background: var(--accent-color); color: white; }
-
-
+#view-valor { white-space: pre-wrap; word-break: break-word; }
 
 /* ================================================================
-   5. RESPONSIVIDADE E ANIMAÇÕES
+   6. EDITOR DE NOTAS E TOOLBAR
    ================================================================ */
-@media (max-width: 700px) {
-    .modal-grid-layout { grid-template-columns: 1fr; gap: 15px; }
-    .coluna-direita textarea { min-height: 120px; }
+.editor-wrapper {
+    display: flex; flex-direction: column;
+    border: 1px solid var(--border-color); border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03); overflow: hidden;
+    transition: all 0.3s ease; position: relative;
+}
+
+.editor-wrapper:focus-within { border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.toolbar-editor {
+    display: flex; gap: 8px; padding: 8px 120px;
+    background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid var(--border-color);
+}
+
+.btn-tool {
+    background: transparent; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 14px; padding: 6px; border-radius: 6px;
+    transition: 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.btn-tool:hover { background: var(--accent-soft); color: var(--accent-color); }
+
+/* Campo Textarea Interno */
+#reg-notas {
+    width: 100% !important; min-height: 150px !important;
+    background: transparent !important; color: var(--text-bright) !important;
+    border: none !important; padding: 12px; resize: vertical;
+    outline: none; font-family: inherit; line-height: 1.5;
+}
+#reg-notas:hover { cursor: s-resize; }
+
+/* Customização Alça de Redimensionamento (Resizer) */
+#reg-notas::-webkit-resizer {
+    background-color: var(--accent-soft); border-radius: 5px; border: 2px solid var(--accent-color); 
+    background-image: linear-gradient(135deg, transparent 50%, var(--accent-color) 50%, var(--accent-color) 60%, transparent 60%, transparent 70%, var(--accent-color) 70%);
+    background-size: 10px 10px;
+}
+
+.editor-wrapper::after {
+    content: "◢"; position: absolute; bottom: 2px; right: 5px;
+    color: var(--accent-color); font-size: 10px; pointer-events: none; opacity: 0.7;
+}
+
+/* ================================================================
+   7. SEÇÕES E ABAS (VISIBILIDADE)
+   ================================================================ */
+.secao-conteudo { animation: fadeIn 0.3s ease; }
+
+.secao-conteudo h2 { font-weight: 400; font-size: 1.2rem; }
+
+/* ================================================================
+   8. ANIMAÇÕES E RESPONSIVIDADE
+   ================================================================ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes surgirCard {
@@ -271,133 +287,7 @@ body, html {
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Preserva quebras de linha no popup de visualização */
-#view-valor {
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-/* ================================================================
-   6. ESTILO DO EDITOR DE NOTAS (UNIFICADO)
-   ================================================================ */
-
-.editor-wrapper {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-/* Efeito de brilho quando clica para digitar */
-.editor-wrapper:focus-within {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-.toolbar-editor {
-    display: flex;
-    gap: 8px;
-    padding: 8px 120px; /* mexe nos icons do notas e detalhes, resultando no tamanho do mesmo */
-    background: rgba(255, 255, 255, 0.05); /* Fundo levemente diferente para destacar */
-    border-bottom: 1px solid var(--border-color);
-}
-
-.btn-tool {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 6px;
-    border-radius: 6px;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-tool:hover {
-    background: var(--accent-soft);
-    color: var(--accent-color);
-}
-
-/* Ajuste do campo de texto interno */
-#reg-notas {
-    width: 100% !important;
-    min-height: 150px !important;
-    background: transparent !important; /* Transparente para usar o fundo do wrapper */
-    color: var(--text-bright) !important;
-    border: none !important; /* Remove a borda padrão para não duplicar */
-    padding: 12px;
-    resize: vertical;
-    outline: none;
-    font-family: inherit;
-    line-height: 1.5;
-}
-
-/* Estilo para as opções do Select não ficarem invisíveis */
-select option {
-    background-color: var(--bg-sidebar);
-    color: var(--text-bright);
-}
-
-/* ================================================================
-   6.1 CUSTOMIZAÇÃO DA ALÇA DE REDIMENSIONAMENTO (RESIZE)
-   ================================================================ */
-
-/* Torna a área de puxar mais visível */
-#reg-notas::-webkit-resizer {
-    background-color: var(--accent-soft); /* Fundo leve na cor do tema */
-    border-radius: 5px;
-    border: 2px solid var(--accent-color); /* Borda na cor principal */
-    
-    /* Adiciona um padrão de listras para parecer uma "garra" */
-    background-image: linear-gradient(
-        135deg, 
-        transparent 50%, 
-        var(--accent-color) 50%, 
-        var(--accent-color) 60%, 
-        transparent 60%, 
-        transparent 70%, 
-        var(--accent-color) 70%
-    );
-    background-size: 10px 10px;
-}
-
-/* Garante que o usuário veja que pode puxar ao passar o mouse */
-#reg-notas:hover {
-    cursor: vertical-text; /* Muda o cursor para indicar ação */
-}
-
-/* Ajuste opcional: Adiciona uma borda sutil no canto para reforçar o visual */
-.editor-wrapper {
-    position: relative;
-}
-
-.editor-wrapper::after {
-    content: "◢"; /* Caractere visual de triângulo no canto */
-    position: absolute;
-    bottom: 2px;
-    right: 5px;
-    color: var(--accent-color);
-    font-size: 10px;
-    pointer-events: none; /* Não atrapalha o clique original */
-    opacity: 0.7;
-}
-
-/* ================================================================
-   6.2 FEEDBACK VISUAL AO PASSAR O MOUSE
-   ================================================================ */
-
-#reg-notas {
-    /* ... seu código anterior ... */
-    resize: vertical; /* Garante que só puxe para baixo, mantendo o layout */
-}
-
-/* Quando o usuário passa o mouse na área de notas, o cursor muda */
-#reg-notas:hover {
-    cursor: s-resize; /* Cursor de seta para cima e para baixo */
+@media (max-width: 700px) {
+    .modal-grid-layout { grid-template-columns: 1fr; gap: 15px; }
+    .coluna-direita textarea { min-height: 120px; }
 }

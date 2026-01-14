@@ -1,22 +1,23 @@
 /**
  * GR DASH - LÓGICA DE INTERFACE E GERENCIAMENTO
  * Seções: 
- * 1. Sidebar e Navegação
- * 2. Controle do Modal
- * 3. Formulário (Senha, Editor de Notas e Envio Unificado)
- * 4. Grid de Registros (Cards Unificados)
- * 5. Visualização de Detalhes (View)
+ * 1. Sidebar e Navegação (Abas)
+ * 2. Controle do Modal (Registro e View)
+ * 3. Formulário (Interação e Envio Unificado)
+ * 4. Renderização (Criação de Cards no Cofre)
  */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     /* ================================================================
-       1. SIDEBAR E NAVEGAÇÃO
+       1. SIDEBAR E NAVEGAÇÃO (ABAS)
        ================================================================ */
     const sidebar = document.getElementById("sidebar");
     const btnAlternar = document.getElementById("btn-alternar");
     const itensMenu = document.querySelectorAll(".item-menu");
+    const secoes = document.querySelectorAll(".secao-conteudo");
 
+    // Controle da Sidebar
     if (btnAlternar && sidebar) {
         btnAlternar.addEventListener("click", () => {
             sidebar.classList.toggle("aberta");
@@ -28,118 +29,122 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Lógica de Troca de Abas (Cofre, Lista, Lixeira)
     itensMenu.forEach((item) => {
-        item.addEventListener("click", function () {
+        item.addEventListener("click", function (e) {
+            e.preventDefault();
+            
+            // Remove ativo de todos e adiciona ao clicado
             itensMenu.forEach((i) => i.classList.remove("ativo"));
             this.classList.add("ativo");
+
+            // Mostra a seção correspondente ao data-secao do link
+            const secaoAlvo = this.getAttribute("data-secao");
+            secoes.forEach(secao => {
+                secao.style.display = (secao.id === `secao-${secaoAlvo}`) ? "block" : "none";
+            });
         });
     });
 
     /* ================================================================
-       2. CONTROLE DO MODAL (ABRIR/FECHAR)
+       2. CONTROLE DOS MODAIS (ABRIR / FECHAR)
        ================================================================ */
-    const modal = document.getElementById("modal-registro");
-    const btnAbrirModal = document.querySelector(".btn-adicionar");
-    const btnFecharX = document.getElementById("btn-fechar");
-    const btnCancelar = document.getElementById("btn-cancelar");
+    const modalReg = document.getElementById("modal-registro");
+    const modalView = document.getElementById("modal-view");
     const formRegistro = document.getElementById("form-novo-registro");
-
-    const selectCat = document.getElementById("reg-categoria-select");
-    const inputNovaCat = document.getElementById("reg-categoria-nova");
-
-    const abrirModal = () => modal.classList.add("modal-visivel");
     
-    const fecharModal = () => {
-        modal.classList.remove("modal-visivel");
+    // Botões de fechar e cancelar
+    const fecharRegistro = () => {
+        modalReg.classList.remove("modal-visivel");
         formRegistro.reset();
-        if (inputNovaCat) inputNovaCat.style.display = "none";
+        document.getElementById("reg-categoria-nova").style.display = "none";
     };
 
-    if (btnAbrirModal) btnAbrirModal.addEventListener("click", abrirModal);
+    const fecharView = () => modalView.classList.remove("modal-visivel");
 
-    [btnFecharX, btnCancelar].forEach((btn) => {
-        if (btn) btn.addEventListener("click", fecharModal);
+    // Eventos de Abertura e Fechamento (Registro)
+    document.querySelector(".btn-adicionar")?.addEventListener("click", () => modalReg.classList.add("modal-visivel"));
+    document.getElementById("btn-fechar")?.addEventListener("click", fecharRegistro);
+    document.getElementById("btn-cancelar")?.addEventListener("click", fecharRegistro);
+
+    // Eventos de Fechamento (View)
+    document.getElementById("btn-fechar-view")?.addEventListener("click", fecharView);
+    document.getElementById("btn-fechar-view-footer")?.addEventListener("click", fecharView);
+
+    // Fechar ao clicar fora da caixa
+    [modalReg, modalView].forEach(m => {
+        m?.addEventListener("click", (e) => { if (e.target === m) m.classList.remove("modal-visivel"); });
     });
 
-    if (selectCat) {
-        selectCat.addEventListener("change", () => {
-            inputNovaCat.style.display = selectCat.value === "outra" ? "block" : "none";
-        });
-    }
-
     /* ================================================================
-       3. LÓGICA DO FORMULÁRIO (SENHA, NOTAS E ENVIO UNIFICADO)
+       3. LÓGICA DO FORMULÁRIO (INTERAÇÃO E ENVIO)
        ================================================================ */
     const btnToggleSenha = document.getElementById('toggle-senha-fixa');
     const inputSenhaFixa = document.getElementById('reg-senha');
     const textareaNotas = document.getElementById('reg-notas');
-    const toolbarNotas = document.getElementById('toolbar-notas-fixa');
+    const selectCat = document.getElementById("reg-categoria-select");
+    const inputNovaCat = document.getElementById("reg-categoria-nova");
 
-    // 3.1 Alternar visibilidade da senha
-    if (btnToggleSenha && inputSenhaFixa) {
-        btnToggleSenha.addEventListener('click', (e) => {
+    // 3.1 Alternar visibilidade da senha no formulário
+    btnToggleSenha?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isPassword = inputSenhaFixa.type === 'password';
+        inputSenhaFixa.type = isPassword ? 'text' : 'password';
+        btnToggleSenha.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+    });
+
+    // 3.2 Lógica de Nova Categoria
+    selectCat?.addEventListener("change", () => {
+        inputNovaCat.style.display = selectCat.value === "outra" ? "block" : "none";
+    });
+
+    // 3.3 Toolbar do Editor de Notas
+    document.querySelectorAll('.btn-tool').forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const isPassword = inputSenhaFixa.type === 'password';
-            inputSenhaFixa.type = isPassword ? 'text' : 'password';
-            btnToggleSenha.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+            const char = btn.getAttribute('data-char');
+            const start = textareaNotas.selectionStart;
+            const end = textareaNotas.selectionEnd;
+            textareaNotas.value = textareaNotas.value.substring(0, start) + char + textareaNotas.value.substring(end);
+            textareaNotas.focus();
+            textareaNotas.selectionStart = textareaNotas.selectionEnd = start + char.length;
         });
-    }
+    });
 
-    // 3.2 Editor de Notas (Emoji/Linhas)
-    if (toolbarNotas && textareaNotas) {
-        toolbarNotas.querySelectorAll('.btn-tool').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const char = btn.getAttribute('data-char');
-                const start = textareaNotas.selectionStart;
-                const end = textareaNotas.selectionEnd;
-                const textoOriginal = textareaNotas.value;
+    // 3.4 SUBMIT: Envio Unificado para o Cofre
+    formRegistro?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        
+        const servico = document.getElementById("reg-servico").value;
+        const categoria = selectCat.value === "outra" ? inputNovaCat.value : selectCat.value;
+        const senha = inputSenhaFixa.value;
+        const notas = textareaNotas.value;
 
-                textareaNotas.value = textoOriginal.substring(0, start) + char + textoOriginal.substring(end);
-                textareaNotas.focus();
-                textareaNotas.selectionStart = textareaNotas.selectionEnd = start + char.length;
-            });
-        });
-    }
-
-    // 3.3 SUBMIT: Agora cria APENAS UM card com todas as informações
-    if (formRegistro) {
-        formRegistro.addEventListener("submit", (e) => {
-            e.preventDefault();
-            
-            const servico = document.getElementById("reg-servico").value;
-            const categoria = selectCat.value === "outra" ? inputNovaCat.value : selectCat.value;
-            const senha = inputSenhaFixa.value; // Não é mais obrigatória
-            const notas = textareaNotas.value;
-
-            // Envia tudo para uma única função de criação
-            criarCardHTML(servico, categoria, senha, notas);
-
-            fecharModal();
-        });
-    }
+        // Cria o card único na aba Cofre
+        criarCardUnificado(servico, categoria, senha, notas);
+        fecharRegistro();
+    });
 
     /* ================================================================
-       4. RENDERIZAÇÃO DO CARD UNIFICADO
+       4. RENDERIZAÇÃO (CRIAÇÃO DE CARDS)
        ================================================================ */
-    const gridPrincipal = document.getElementById("grid-principal");
-
-    function criarCardHTML(servico, categoria, senha, notas) {
+    function criarCardUnificado(servico, categoria, senha, notas) {
+        const gridPrincipal = document.getElementById("grid-principal");
         const novoCard = document.createElement("div");
         novoCard.className = "card-senha";
-
-        // Ícone: Prioriza escudo se houver senha, caso contrário ícone de texto
-        let icone = senha.trim() !== "" ? "fas fa-shield-halved" : "fas fa-file-lines";
+        
+        // Ícone: Escudo se houver senha, caso contrário, ícone de nota
+        const iconeTag = senha.trim() !== "" ? "fas fa-shield-halved" : "fas fa-file-lines";
 
         novoCard.innerHTML = `
             <div class="card-topo">
-                <div class="servico-icone"><i class="${icone}"></i></div>
+                <div class="servico-icone"><i class="${iconeTag}"></i></div>
                 <span class="tag-categoria">${categoria}</span>
             </div>
             <div class="card-info-central">
                 <span class="servico-nome">${servico}</span>
-                ${senha.trim() !== "" ? `<div class="preview-texto" style="color:var(--accent-color)">••••••••••••</div>` : ""}
-                ${notas.trim() !== "" ? `<div class="preview-texto notas-preview">${notas}</div>` : ""}
+                ${senha ? `<div class="preview-texto senha-focada">••••••••••••</div>` : ''}
+                ${notas ? `<div class="preview-texto notas-sutil">${notas}</div>` : ''}
             </div>
             <div class="card-camada-acoes">
                 <button class="btn-acao-card btn-copiar-trigger"><i class="fas fa-copy"></i> Copiar</button>
@@ -147,76 +152,55 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-        // Lógica de Copiar: Prioriza a senha, se não houver, copia as notas
+        // Evento Copiar (Prioridade para Senha)
         novoCard.querySelector(".btn-copiar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
-            const valorCopiar = senha.trim() !== "" ? senha : notas;
-            
-            navigator.clipboard.writeText(valorCopiar).then(() => {
+            const valor = senha || notas;
+            navigator.clipboard.writeText(valor).then(() => {
                 const btn = e.target.closest(".btn-acao-card");
-                const originalHTML = btn.innerHTML;
+                const original = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
-                setTimeout(() => (btn.innerHTML = originalHTML), 2000);
+                setTimeout(() => btn.innerHTML = original, 2000);
             });
         });
 
-        // Clique no card para ver detalhes
+        // Evento Deletar
+        novoCard.querySelector(".btn-deletar-trigger").addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (confirm(`Mover "${servico}" para a lixeira?`)) {
+                novoCard.style.opacity = "0";
+                setTimeout(() => novoCard.remove(), 300);
+            }
+        });
+
+        // Evento Visualizar Detalhes
         novoCard.addEventListener("click", (e) => {
             if (!e.target.closest(".card-camada-acoes")) {
                 exibirModalView(servico, categoria, senha, notas);
             }
         });
 
-        // Deletar
-        novoCard.querySelector(".btn-deletar-trigger").addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (confirm(`Excluir o registro "${servico}"?`)) {
-                novoCard.style.opacity = "0";
-                novoCard.style.transform = "scale(0.9)";
-                setTimeout(() => novoCard.remove(), 300);
-            }
-        });
-
         gridPrincipal.prepend(novoCard);
     }
 
-    /* ================================================================
-       5. MODAL DE VISUALIZAÇÃO (VIEW)
-       ================================================================ */
     function exibirModalView(servico, categoria, senha, notas) {
-        const modalView = document.getElementById("modal-view");
-        if (!modalView) return;
-
         document.getElementById("view-titulo").innerText = servico;
         document.getElementById("view-tag").innerText = categoria.toUpperCase();
         
-        // Formata o conteúdo para exibição no Modal de View
-        let infoExibir = "";
-        if (senha.trim() !== "") infoExibir += `CHAVE/SENHA: ${senha}\n\n`;
-        if (notas.trim() !== "") infoExibir += `NOTAS:\n${notas}`;
-        if (infoExibir === "") infoExibir = "Sem detalhes adicionais.";
-
-        document.getElementById("view-valor").innerText = infoExibir;
-
-        const btnCopiarModal = document.getElementById("btn-copiar-modal");
-        btnCopiarModal.onclick = (e) => {
-            e.preventDefault();
-            const valorCopiar = senha.trim() !== "" ? senha : notas;
-            navigator.clipboard.writeText(valorCopiar);
-            const icon = btnCopiarModal.querySelector("i");
+        let conteudo = "";
+        if (senha.trim() !== "") conteudo += `CHAVE/SENHA: ${senha}\n\n`;
+        if (notas.trim() !== "") conteudo += `NOTAS:\n${notas}`;
+        
+        document.getElementById("view-valor").innerText = conteudo || "Sem detalhes.";
+        
+        // Configura o botão copiar do modal view
+        document.getElementById("btn-copiar-modal").onclick = () => {
+            navigator.clipboard.writeText(senha || notas);
+            const icon = document.querySelector("#btn-copiar-modal i");
             icon.className = "fas fa-check";
-            setTimeout(() => (icon.className = "far fa-copy"), 2000);
+            setTimeout(() => icon.className = "far fa-copy", 2000);
         };
 
         modalView.classList.add("modal-visivel");
-    }
-
-    // Fechar Modal View
-    const modalView = document.getElementById("modal-view");
-    if (modalView) {
-        const fecharV = () => modalView.classList.remove("modal-visivel");
-        document.getElementById("btn-fechar-view")?.addEventListener("click", fecharV);
-        document.getElementById("btn-fechar-view-footer")?.addEventListener("click", fecharV);
-        modalView.addEventListener("click", (e) => { if (e.target === modalView) fecharV(); });
     }
 });
