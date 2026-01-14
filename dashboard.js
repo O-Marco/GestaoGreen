@@ -1,11 +1,5 @@
 /**
  * GR DASH - LÓGICA DE INTERFACE E GERENCIAMENTO
- * Seções:
- * 1. Sidebar e Navegação (Abas)
- * 2. Controle do Modal (Registro e View)
- * 3. Formulário (Interação e Envio Unificado)
- * 4. Renderização e Persistência (Cards e LocalStorage)
- * 5. Funções de Apoio ao Banco de Dados
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -70,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ================================================================
-       3. LÓGICA DO FORMULÁRIO (INTERAÇÃO E ENVIO)
+       3. LÓGICA DO FORMULÁRIO E AÇÕES DA LIXEIRA
        ================================================================ */
     const btnToggleSenha = document.getElementById("toggle-senha-fixa");
     const inputSenhaFixa = document.getElementById("reg-senha");
@@ -89,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inputNovaCat.style.display = selectCat.value === "outra" ? "block" : "none";
     });
 
+    // Barra de ferramentas das notas
     document.querySelectorAll(".btn-tool").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -101,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Salvar Registro
     formRegistro?.addEventListener("submit", (e) => {
         e.preventDefault();
         const servico = document.getElementById("reg-servico").value;
@@ -108,21 +104,48 @@ document.addEventListener("DOMContentLoaded", () => {
         const senha = inputSenhaFixa.value;
         const notas = textareaNotas.value;
 
-        criarCardUnificado(servico, categoria, senha, notas);
+        criarCardUnificado(servico, categoria, senha, notas, true, "cofre");
         fecharRegistro();
     });
 
+    // BOTÃO: Esvaziar Lixeira
+    document.getElementById("btn-esvaziar-lixeira")?.addEventListener("click", () => {
+        let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+        const temNaLixeira = dados.some(item => item.local === "lixeira");
+
+        if (!temNaLixeira) return alert("A lixeira já está vazia!");
+
+        if (confirm("Deseja apagar TODOS os itens da lixeira permanentemente?")) {
+            dados = dados.filter(item => item.local !== "lixeira");
+            localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+            carregarDadosIniciais();
+        }
+    });
+
+    // BOTÃO: Excluir Selecionados
+    document.getElementById("btn-excluir-selecionados")?.addEventListener("click", () => {
+        const selecionados = document.querySelectorAll(".card-checkbox:checked");
+        if (selecionados.length === 0) return alert("Selecione ao menos um card.");
+
+        if (confirm(`Excluir ${selecionados.length} itens permanentemente?`)) {
+            let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+            selecionados.forEach(cb => {
+                const nomeServico = cb.getAttribute("data-servico");
+                dados = dados.filter(item => item.servico !== nomeServico);
+            });
+            localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+            carregarDadosIniciais();
+        }
+    });
+
     /* ================================================================
-       4. RENDERIZAÇÃO E PERSISTÊNCIA (CARDS E LOCALSTORAGE)
+       4. RENDERIZAÇÃO E PERSISTÊNCIA (CARDS)
        ================================================================ */
-    
-    // Adicionei o parâmetro localAlvo para o F5 saber onde colocar o card
-    function criarCardUnificado(servico, categoria, senha, notas, deveSalvar = true, localAlvo = 'cofre') {
-        
-        // Seleciona a grid correta (grid-principal, grid-lista ou grid-lixeira)
+
+    function criarCardUnificado(servico, categoria, senha, notas, deveSalvar = true, localAlvo = "cofre") {
         let gridId = "grid-principal";
-        if (localAlvo === 'lista') gridId = "grid-lista";
-        if (localAlvo === 'lixeira') gridId = "grid-lixeira";
+        if (localAlvo === "lista") gridId = "grid-lista";
+        if (localAlvo === "lixeira") gridId = "grid-lixeira";
 
         const gridDestino = document.getElementById(gridId);
         if (!gridDestino) return;
@@ -136,7 +159,13 @@ document.addEventListener("DOMContentLoaded", () => {
         let statusTipo = temSenha ? "status-senha" : "status-nota";
         if (temSenha && temNota) { iconeClass = "fas fa-vault"; statusTipo = "status-misto"; }
 
+        // Checkbox apenas para lixeira
+        const htmlCheckbox = localAlvo === "lixeira" 
+            ? `<div class="card-checkbox-container"><input type="checkbox" class="card-checkbox" data-servico="${servico}" onclick="event.stopPropagation()"></div>` 
+            : "";
+
         novoCard.innerHTML = `
+            ${htmlCheckbox}
             <div class="card-topo">
                 <div class="servico-icone ${statusTipo}"><i class="${iconeClass}"></i></div>
                 <span class="tag-categoria">${categoria}</span>
@@ -147,104 +176,116 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="card-camada-acoes">
                 <button class="btn-acao-card btn-copiar-trigger" title="Copiar"><i class="fas fa-copy"></i></button>
-                <button class="btn-acao-card btn-importar-trigger" title="Mover para Lista"><i class="fas fa-arrow-right-to-bracket"></i></button>
-                <button class="btn-acao-card btn-deletar-trigger" title="Excluir"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn-acao-card btn-importar-trigger" title="${localAlvo === 'lixeira' ? 'Restaurar' : 'Mover para Lista'}">
+                    <i class="${localAlvo === 'lixeira' ? 'fas fa-undo' : 'fas fa-arrow-right-to-bracket'}"></i>
+                </button>
+                <button class="btn-acao-card btn-deletar-trigger" title="Excluir Permanentemente"><i class="fas fa-trash-alt"></i></button>
             </div>
         `;
 
-        // 1. Copiar
+        // Evento Copiar
         novoCard.querySelector(".btn-copiar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
             navigator.clipboard.writeText(senha || notas);
             const icon = e.currentTarget.querySelector("i");
             icon.className = "fas fa-check";
-            setTimeout(() => icon.className = "fas fa-copy", 1000);
+            setTimeout(() => (icon.className = "fas fa-copy"), 1000);
         });
 
-        // 2. Mover para Lista (Seta) - ATUALIZADO
+        // Evento Mover/Restaurar
         novoCard.querySelector(".btn-importar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
-            moverParaLocal(servico, 'lista', novoCard);
+            const destino = localAlvo === "lixeira" ? "cofre" : "lista";
+            moverParaLocal(servico, destino, novoCard);
         });
 
-        // 3. Mover para Lixeira (Botão Lixeira) - ATUALIZADO
+        // Evento Deletar (Individual)
         novoCard.querySelector(".btn-deletar-trigger").addEventListener("click", (e) => {
             e.stopPropagation();
-            if (confirm(`Mover "${servico}" para a lixeira?`)) {
-                moverParaLocal(servico, 'lixeira', novoCard);
+            if (localAlvo === "lixeira") {
+                if (confirm(`Apagar "${servico}" permanentemente?`)) {
+                    removerDadosNoBanco(servico);
+                    carregarDadosIniciais();
+                }
+            } else {
+                if (confirm(`Mover "${servico}" para a lixeira?`)) {
+                    moverParaLocal(servico, "lixeira", novoCard);
+                }
             }
         });
 
         novoCard.addEventListener("click", (e) => {
-            if (!e.target.closest(".card-camada-acoes")) {
+            if (!e.target.closest(".card-camada-acoes") && !e.target.closest(".card-checkbox")) {
                 exibirModalView(servico, categoria, senha, notas);
             }
         });
 
-        if (deveSalvar) {
-            salvarDados({ servico, categoria, senha, notas, local: 'cofre' });
-        }
-
+        if (deveSalvar) salvarDadosNoBanco({ servico, categoria, senha, notas, local: "cofre" });
         gridDestino.prepend(novoCard);
     }
 
     /* ================================================================
-       5. FUNÇÕES DE APOIO AO BANCO DE DADOS (LOCALSTORAGE)
+       5. FUNÇÕES DE BANCO DE DADOS (LOCALSTORAGE)
        ================================================================ */
-    function salvarDados(objeto) {
+
+    function salvarDadosNoBanco(objeto) {
         const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
         dados.push(objeto);
         localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
     }
 
-    function carregarDadosIniciais() {
-        const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-        
-        // Limpa as grids antes de carregar para não duplicar
-        const grids = ["grid-principal", "grid-lista", "grid-lixeira"];
-        grids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
-
-        dados.forEach(item => {
-            // Passamos o local que está salvo no banco (item.local)
-            criarCardUnificado(item.servico, item.categoria, item.senha, item.notas, false, item.local || 'cofre');
-        });
-    }
-
-    // NOVA FUNÇÃO: Move o item entre as abas no banco e na tela
-    function moverParaLocal(nome, novoLocal, cardElemento) {
-        let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
-        const index = dados.findIndex(item => item.servico === nome);
-        
-        if (index !== -1) {
-            dados[index].local = novoLocal; // Altera de 'cofre' para 'lista' ou 'lixeira'
-            localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
-            
-            // Efeito visual de saída
-            cardElemento.style.transform = "scale(0.8)";
-            cardElemento.style.opacity = "0";
-            setTimeout(() => {
-                cardElemento.remove();
-                // Recarrega os dados para aparecerem nas grids corretas
-                carregarDadosIniciais();
-                alert(`"${nome}" movido com sucesso!`);
-            }, 300);
-        }
-    }
-
-    function removerDados(nome) {
+    function removerDadosNoBanco(nome) {
         let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
         dados = dados.filter(item => item.servico !== nome);
         localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
     }
 
+    function carregarDadosIniciais() {
+        const dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+        const grids = ["grid-principal", "grid-lista", "grid-lixeira"];
+        
+        grids.forEach((id) => {
+            const elemento = document.getElementById(id);
+            if (elemento) {
+                // Se a lixeira estiver vazia, mostra o ícone de lixeira vazia
+                if (id === "grid-lixeira") {
+                    const lixeiraVazia = !dados.some(i => i.local === "lixeira");
+                    elemento.innerHTML = lixeiraVazia ? `
+                        <div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;">
+                            <i class="fas fa-trash-alt" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
+                            <h2 style="color: var(--text-muted);">Lixeira vazia</h2>
+                        </div>
+                    ` : "";
+                } else {
+                    elemento.innerHTML = "";
+                }
+            }
+        });
+
+        dados.forEach((item) => {
+            criarCardUnificado(item.servico, item.categoria, item.senha, item.notas, false, item.local || "cofre");
+        });
+    }
+
+    function moverParaLocal(nome, novoLocal, cardElemento) {
+        let dados = JSON.parse(localStorage.getItem("gr_dash_dados") || "[]");
+        const index = dados.findIndex((item) => item.servico === nome);
+
+        if (index !== -1) {
+            dados[index].local = novoLocal;
+            localStorage.setItem("gr_dash_dados", JSON.stringify(dados));
+            cardElemento.style.opacity = "0";
+            cardElemento.style.transform = "scale(0.8)";
+            setTimeout(() => carregarDadosIniciais(), 300);
+        }
+    }
+
     function exibirModalView(servico, categoria, senha, notas) {
         document.getElementById("view-titulo").innerText = servico;
         document.getElementById("view-tag").innerText = categoria.toUpperCase();
-        
         let conteudo = "";
-        if (senha.trim() !== "") conteudo += `CHAVE/SENHA: ${senha}\n\n`;
-        if (notas.trim() !== "") conteudo += `NOTAS:\n${notas}`;
-        
+        if (senha && senha.trim() !== "") conteudo += `CHAVE/SENHA: ${senha}\n\n`;
+        if (notas && notas.trim() !== "") conteudo += `NOTAS:\n${notas}`;
         document.getElementById("view-valor").innerText = conteudo || "Sem detalhes.";
         document.getElementById("modal-view").classList.add("modal-visivel");
         
@@ -256,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // Carregar dados salvos ao iniciar
+    // Inicialização
     carregarDadosIniciais();
-
 });

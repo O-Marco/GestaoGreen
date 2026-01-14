@@ -80,18 +80,31 @@
         <section id="secao-lista" class="secao-conteudo" style="display: none;">
             <div class="grid-senhas" id="grid-lista">
                 <div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;">
-                    <i class="fas fa-list-ul" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
+                    <i class="fas fa-list-ul"
+                        style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
                     <h2 style="color: var(--text-muted);">Sua Lista está vazia</h2>
                 </div>
             </div>
         </section>
 
         <section id="secao-lixeira" class="secao-conteudo" style="display: none;">
-            <div class="grid-senhas" id="grid-lixeira">
-                <div style="padding: 40px; text-align: center; width: 100%; grid-column: 1 / -1;">
-                    <i class="fas fa-trash-alt" style="font-size: 50px; color: var(--border-color); margin-bottom: 20px;"></i>
-                    <h2 style="color: var(--text-muted);">Lixeira vazia</h2>
+            <div class="cabecalho-acoes-lixeira">
+                <div class="info-lixeira">
+                    <h2>Lixeira</h2>
+                    <p id="contador-lixeira" style="color: var(--text-muted); font-size: 0.8rem;">0 itens</p>
                 </div>
+                <div class="grupo-botoes-lixeira">
+                    <button id="btn-excluir-selecionados" class="btn-lixeira-acao" title="Excluir selecionados">
+                        <i class="fas fa-check-double"></i> Excluir Selecionados
+                    </button>
+                    <button id="btn-esvaziar-lixeira" class="btn-lixeira-acao btn-perigo"
+                        title="Apagar tudo permanentemente">
+                        <i class="fas fa-dumpster"></i> Esvaziar Lixeira
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid-senhas" id="grid-lixeira">
             </div>
         </section>
 
